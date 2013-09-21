@@ -45,8 +45,21 @@ Does the whole quiz.
 def main():
   while True:
     perfect, avg_time = chess.quiz(one_round, 20)
-    if perfect and avg_time < 1.0:
-      print "Good work. Play brother.py to advance."
+    if perfect:
+      if avg_time < 0.5:
+        print "You have achieved square-color nirvana."
+      elif avg_time < 1.0:
+        print "Good work. You may rest and advance."
+      elif avg_time < 1.5:
+        print "You are halfway to perfection."
+      elif avg_time < 2.0:
+        print "Your skills are significant."
+      elif avg_time < 2.5:
+        print "Your practice is paying off."
+      elif avg_time < 3.0:
+        print "Your effort is nontrivial."
+      else:
+        print "You did not fail."
       print
     chess.pause_and_clear()
 
