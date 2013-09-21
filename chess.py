@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import random
+import sys
 import time
 
 """
@@ -53,3 +54,12 @@ def quiz(one_round, num_rounds):
                                         int(100.0 * score / num_rounds))
   print "You spent %.2fs per question." % (duration / num_rounds)
   print
+
+"""
+Asks the user to hit enter to continue and then clears.
+"""
+def pause_and_clear():
+  print "Hit enter to continue."
+  sys.stdin.readline()
+  print "\n" * 100
+  

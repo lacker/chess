@@ -36,16 +36,16 @@ def one_round():
   board = board.replace("#", u"\u25a0")
   board = board.replace("-", u"\u25a1")
   print board
-  print "Hit enter to continue."
-  sys.stdin.readline()
-  print "\n" * 100
+  chess.pause_and_clear()
   return 0
 
 """
 Does the whole quiz.
 """
 def main():
-  chess.quiz(one_round, 20)
+  while True:
+    chess.quiz(one_round, 20)
+    pause_and_clear()
 
 if __name__ == "__main__":
   main()
