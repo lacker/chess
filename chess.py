@@ -34,6 +34,24 @@ def color(square):
   return 'black'
 
 """
+Prints a blank board.
+"""
+def print_blank_board():
+  board = """
+- # - # - # - # 
+# - # - # - # - 
+- # - # - # - # 
+# - # - # - # - 
+- # - # - # - # 
+# - # - # - # - 
+- # - # - # - # 
+# - # - # - # -
+  """
+  board = board.replace("#", u"\u25a0")
+  board = board.replace("-", u"\u25a1")
+  print board
+  
+"""
 Returns a random square in a format like (4, 5).
 """
 def random_square():
@@ -59,6 +77,34 @@ def quiz(one_round, num_rounds):
   print
   return (perfect, avg_time)
 
+"""
+Finds the 'brother square' for the given square.
+"""
+def brother(square):
+  x, y = square
+  return (7 - x, 7 - y)
+
+"""
+Sends a congratulations message where 0.5 is perfect and 3 is good for
+someone just getting started.
+"""
+def congratulate(avg_time):
+  if avg_time < 0.5:
+    print "Your mind is like a hash table. You have achieved nirvana."
+  elif avg_time < 1.0:
+    print "Good work. You may rest and advance."
+  elif avg_time < 1.5:
+    print "You are halfway to perfection."
+  elif avg_time < 2.0:
+    print "Your skills are significant."
+  elif avg_time < 2.5:
+    print "Your practice is paying off."
+  elif avg_time < 3.0:
+    print "Your effort is nontrivial."
+  else:
+    print "You did not fail."
+  print
+  
 """
 Asks the user to hit enter to continue and then clears.
 """

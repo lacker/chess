@@ -1,8 +1,8 @@
 #!/usr/bin/python
 """
-A quiz to see if you know what the colors are for squares on the chessboard.
+A quiz to see if you can name brother squares.
 
-Phase 1 of Rensch blindfold training.
+Phase 2 of Rensch blindfold training.
 """
 import chess
 import sys
@@ -12,17 +12,18 @@ Does one round of the quiz. Returns your score, 0 or 1.
 """
 def one_round():
   square = chess.random_square()
+  brother = chess.brother(square)
   name = chess.name_from_square(square)
-  color = chess.color(square)
-  print "What color is %s?" % name
+  brother_name = chess.name_from_square(brother)
+  print "What is the brother of %s?" % name
   answer = ""
-  while len(answer) == 0:
+  while len(answer) != 2:
     answer = sys.stdin.readline().strip().lower()
-  if answer[0] == color[0]:
+  if answer == brother_name:
     print "Correct!"
     print
     return 1
-  print "No. %s is %s." % (name, color)
+  print "No. The brother of %s is %s." % (name, brother_name)
   chess.print_blank_board()
   chess.pause_and_clear()
   return 0
