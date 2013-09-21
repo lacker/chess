@@ -45,7 +45,7 @@ Does the whole quiz.
 def main():
   while True:
     chess.quiz(one_round, 20)
-    pause_and_clear()
+    chess.pause_and_clear()
 
 if __name__ == "__main__":
   main()
