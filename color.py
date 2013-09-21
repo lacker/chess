@@ -47,7 +47,7 @@ def main():
     perfect, avg_time = chess.quiz(one_round, 20)
     if perfect:
       if avg_time < 0.5:
-        print "You have achieved square-color nirvana."
+        print "Your mind is like a hash table. You have achieved nirvana."
       elif avg_time < 1.0:
         print "Good work. You may rest and advance."
       elif avg_time < 1.5:
