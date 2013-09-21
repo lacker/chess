@@ -42,6 +42,7 @@ def random_square():
 """
 Runs a quiz given the particular one-round function.
 The function should return 0 or 1 for success.
+Returns (bool-for-was-it-perfect, average-time)
 """
 def quiz(one_round, num_rounds):
   score = 0
@@ -50,10 +51,13 @@ def quiz(one_round, num_rounds):
     score += one_round()
   end = time.time()
   duration = end - start
+  perfect = score == num_rounds
   print "You scored %d / %d = %d%%." % (score, num_rounds,
                                         int(100.0 * score / num_rounds))
+  avg_time = duration / num_rounds
   print "You spent %.2fs per question." % (duration / num_rounds)
   print
+  return (perfect, avg_time)
 
 """
 Asks the user to hit enter to continue and then clears.

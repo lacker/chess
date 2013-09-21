@@ -44,7 +44,10 @@ Does the whole quiz.
 """
 def main():
   while True:
-    chess.quiz(one_round, 20)
+    perfect, avg_time = chess.quiz(one_round, 20)
+    if perfect and avg_time < 1.0:
+      print "Good work. Play brother.py to advance."
+      print
     chess.pause_and_clear()
 
 if __name__ == "__main__":
