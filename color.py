@@ -42,7 +42,7 @@ def main():
     perfect, avg_time = chess.quiz(lambda: one_round(square_config), 20)
     if perfect:
       chess.congratulate(avg_time)
-    chess.pause_and_clear()
+    chess.pause_and_clear(5)
 
 if __name__ == "__main__":
   main()

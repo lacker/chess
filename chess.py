@@ -123,8 +123,12 @@ def congratulate(avg_time):
 """
 Asks the user to hit enter to continue and then clears.
 """
-def pause_and_clear():
-  print "Hit enter to continue."
-  sys.stdin.readline()
+def pause_and_clear(pause_time=None):
+  if pause_time:
+    print "Please rest for %d seconds." % pause_time
+    time.sleep(pause_time)
+  else:
+    print "Hit enter to continue."
+    sys.stdin.readline()
   print "\n" * 100
   
