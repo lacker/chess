@@ -53,9 +53,24 @@ def print_blank_board():
   
 """
 Returns a random square in a format like (4, 5).
+
+Can take a config string like bk, bq, wk, wq to define a quarter of the board.
+
 """
-def random_square():
-  return (random.randint(0, 7), random.randint(0, 7))
+def random_square(square_config=None):
+  x = random.randint(0, 7)
+  y = random.randint(0, 7)
+  if square_config is not None:
+    color, side = square_config
+    if color == "b":
+      y = random.randint(4, 7)
+    elif color == "w":
+      y = random.randint(0, 3)
+    if side == "k":
+      x = random.randint(4, 7)
+    elif side == "q":
+      x = random.randint(0, 3)
+  return x, y
 
 """
 Runs a quiz given the particular one-round function.

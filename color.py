@@ -9,9 +9,12 @@ import sys
 
 """
 Does one round of the quiz. Returns your score, 0 or 1.
+
+square_config can be bk, bq, wk, wq or none to indicate what area of the
+board to quiz from.
 """
-def one_round():
-  square = chess.random_square()
+def one_round(square_config):
+  square = chess.random_square(square_config)
   name = chess.name_from_square(square)
   color = chess.color(square)
   print "What color is %s?" % name
@@ -31,8 +34,12 @@ def one_round():
 Does the whole quiz.
 """
 def main():
+  square_config = None
+  if len(sys.argv) == 2:
+    square_config = sys.argv[1]
+  
   while True:
-    perfect, avg_time = chess.quiz(one_round, 20)
+    perfect, avg_time = chess.quiz(lambda: one_round(square_config), 20)
     if perfect:
       chess.congratulate(avg_time)
     chess.pause_and_clear()
