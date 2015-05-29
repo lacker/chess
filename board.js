@@ -17,17 +17,21 @@ function Board() {
                   "RNBQKBNR"]
 }
 
+// "a8" -> 0, "a1" -> 7
+function rowForSquare(square) {
+  return "8".charCodeAt(0) - square[1].charCodeAt(0)
+}
+
+// "a1" -> 0, "h1" -> 7
+function colForSquare(square) {
+  return square[0].charCodeAt(0) - "a".charCodeAt(0)
+}
+
 // square is in "e4" type notation
 Board.prototype.get = function(square) {
-  // "8" -> 0, "1" -> 7
-  var row = "8".charCodeAt(0) - square[1].charCodeAt(0)
-
-  // "a" -> 0, "h" -> 7
-  var col = square[0].charCodeAt(0) - "a".charCodeAt(0)
-
-  return this.squares[row][col]
+  return this.squares[rowForSquare(square)][colForSquare(square)]
 }
 
 // Tests
 var b = new Board()
-if (b.get("e1") != "K") throw "e1 failed"
+if (b.get("e1") != "K") throw "get(e1) failed"
