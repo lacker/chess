@@ -28,10 +28,15 @@ function colForSquare(square) {
 }
 
 // square is in "e4" type notation
-Board.prototype.get = function(square) {
+Board.prototype.pieceForSquare = function(square) {
   return this.squares[rowForSquare(square)][colForSquare(square)]
+}
+
+Board.prototype.pieceForRowCol = function(row, col) {
+  return this.squares[row][col]
 }
 
 // Tests
 var b = new Board()
-if (b.get("e1") != "K") throw "get(e1) failed"
+if (b.pieceForSquare("e1") != "K") throw "pieceForSquare failed"
+if (b.pieceForRowCol(7, 4) != "K") throw "pieceForRowCol failed"
