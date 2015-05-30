@@ -2,41 +2,40 @@
 // Written for node v0.10.20
 
 function Board() {
-  // Stored in [row][column] storage graphically. White on bottom.
-  // This is annoyingly opposite from chess numbering; let's see if I
-  // regret that.
-  // This does make it so that squares is the same order as FEN
-  // notation squares.
-  this.squares = ["rnbqkbnr",
-                  "pppppppp",
-                  "........",
-                  "........",
-                  "........",
-                  "........",
-                  "PPPPPPPP",
-                  "RNBQKBNR"]
+  // Each square's content has a character representation.
+  // Standard chess notation for pieces, caps is white, . is empty.
+  // [0][0] is a1, [7][0] is h1, [7][7] is h8.
+  this.squares = ["RP....pr",
+                  "NP....pn",
+                  "BP....pb",
+                  "QP....pq",
+                  "KP....pk",
+                  "BP....pb",
+                  "NP....pn",
+                  "RP....pr"]
 }
 
-// "a8" -> 0, "a1" -> 7
-function rowForSquare(square) {
-  return "8".charCodeAt(0) - square[1].charCodeAt(0)
+// "a1" -> [0, 0]
+function coordsForSquare(square) {
+  return [square[0].charCodeAt(0) - "a".charCodeAt(0),
+          square[1].charCodeAt(0) - "1".charCodeAt(0)]
 }
 
-// "a1" -> 0, "h1" -> 7
-function colForSquare(square) {
-  return square[0].charCodeAt(0) - "a".charCodeAt(0)
+// (0, 0) -> "a1"
+function squareForCoords(x, y) {
+  return (String.fromCharCode("a".charCodeAt(0) + x) +
+          String.fromCharCode("1".charCodeAt(0) + y))
 }
 
 // square is in "e4" type notation
 Board.prototype.pieceForSquare = function(square) {
-  return this.squares[rowForSquare(square)][colForSquare(square)]
-}
-
-Board.prototype.pieceForRowCol = function(row, col) {
-  return this.squares[row][col]
+  var coords = coordsForSquare(square)
+  var x = coords[0]
+  var y = coords[1]
+  return this.squares[x][y]
 }
 
 // Tests
 var b = new Board()
 if (b.pieceForSquare("e1") != "K") throw "pieceForSquare failed"
-if (b.pieceForRowCol(7, 4) != "K") throw "pieceForRowCol failed"
+
