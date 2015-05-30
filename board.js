@@ -69,8 +69,27 @@ Board.prototype.pieceForSquare = function(square) {
 }
 
 // A list of [x, y] coords that a knight can move to.
+// This ignores "no moving into check".
 Board.prototype.knightMoves = function(color, x, y) {
-  throw "TODO"
+  var deltas = [[1, 2],
+                [2, 1],
+                [-1, 2],
+                [2, -1],
+                [1, -2],
+                [-2, 1],
+                [-1, -2],
+                [-2, -1]]
+  var answer = []
+  for (var i = 0; i < deltas.length; i++) {
+    var newx = x + deltas[i][0]
+    var newy = y + deltas[i][1]
+    if (validCoords(newx, newy) &&
+        this.colorForCoords(newx, newy) != color) {
+      answer.push([newx, newy])
+    }
+  }
+
+  return answer
 }
 
 // Testing
@@ -87,3 +106,4 @@ testEq("validCoords", false, validCoords(4, 8))
 testEq("colorForCoords", WHITE, b.colorForCoords(6, 1))
 testEq("colorForCoords", BLACK, b.colorForCoords(3, 7))
 testEq("colorForCoords", EMPTY, b.colorForCoords(2, 2))
+testEq("knightMoves", 2, b.knightMoves(WHITE, 1, 0).length)
