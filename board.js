@@ -104,15 +104,54 @@ var BISHOP_STEPS = [[1, 1],
                      [-1, -1],
                      [1, -1]]
 var ROOK_STEPS = [[1, 0],
-                   [0, 1],
-                   [-1, 0],
-                   [0, -1]]
+                  [0, 1],
+                  [-1, 0],
+                  [0, -1]]
 var QUEEN_STEPS = BISHOP_STEPS.concat(ROOK_STEPS)
 
 // A list of [x, y] coords that a king can move to.
 // This ignores "no moving into check".
 Board.prototype.kingMoves = function(color, x, y) {
   return this.hopMoves(QUEEN_STEPS, color, x, y)
+}
+
+// A list of [x, y] coords that a piece can move to, if its valid
+// moves are given by the provided list of deltas, plus it can repeat
+// them as much as it wants.
+Board.prototype.slideMoves = function(deltas, color, x, y) {
+  var answer = []
+  for (var i = 0; i < deltas.length; i++) {
+    var dx = deltas[i][0]
+    var dy = deltas[i][1]
+    var newx = x
+    var newy = y
+    while (true) {
+      newx += dx
+      newy += dy
+      if (!validCoords(newx, newy)) {
+        break
+      }
+      var colorAt = this.colorForCoords(newx, newy)
+      if (colorAt == color) {
+        break
+      }
+      answer.push([newx, newy])
+      if (colorAt == -color) {
+        break
+      }
+    }
+  }
+  return answer
+}
+
+Board.prototype.bishopMoves = function(color, x, y) {
+  return this.slideMoves(BISHOP_STEPS, color, x, y)
+}
+Board.prototype.rookMoves = function(color, x, y) {
+  return this.slideMoves(ROOK_STEPS, color, x, y)
+}
+Board.prototype.queenMoves = function(color, x, y) {
+  return this.slideMoves(QUEEN_STEPS, color, x, y)
 }
 
 // Testing
@@ -131,3 +170,4 @@ testEq("colorForCoords", BLACK, b.colorForCoords(3, 7))
 testEq("colorForCoords", EMPTY, b.colorForCoords(2, 2))
 testEq("knightMoves", 2, b.knightMoves(WHITE, 1, 0).length)
 testEq("kingMoves", 0, b.kingMoves(WHITE, 4, 0).length)
+testEq("bishopMoves", 8, b.bishopMoves(WHITE, 3, 3).length)
