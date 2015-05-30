@@ -43,8 +43,7 @@ function validCoords(x, y) {
   return x >= 0 && x < 8 && y >= 0 && y < 8
 }
 
-Board.prototype.colorForCoords = function(x, y) {
-  var piece = this.board[x][y]
+function colorForPiece(piece) {
   if (piece >= "a" && piece <= "z") {
     return BLACK
   }
@@ -55,6 +54,10 @@ Board.prototype.colorForCoords = function(x, y) {
     return EMPTY
   }
   throw ("invalid piece: " + piece)
+}
+
+Board.prototype.colorForCoords = function(x, y) {
+  return colorForPiece(this.board[x][y])
 }
 
 // square is in "e4" type notation
