@@ -1,5 +1,6 @@
 #!/usr/local/bin/node
 // Written for node v0.10.20
+// TODO: convert to ES6
 
 function Board() {
   // Each square's content has a character representation.
