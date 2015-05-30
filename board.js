@@ -68,17 +68,10 @@ Board.prototype.pieceForSquare = function(square) {
   return this.board[x][y]
 }
 
-// A list of [x, y] coords that a knight can move to.
-// This ignores "no moving into check".
-Board.prototype.knightMoves = function(color, x, y) {
-  var deltas = [[1, 2],
-                [2, 1],
-                [-1, 2],
-                [2, -1],
-                [1, -2],
-                [-2, 1],
-                [-1, -2],
-                [-2, -1]]
+// A list of [x, y] coords that a piece can move to, if its valid
+// moves are given by the provided list of [dx, dy] hop deltas.
+// (Useful for kings and knights.)
+Board.prototype.hopMoves = function(deltas, color, x, y) {
   var answer = []
   for (var i = 0; i < deltas.length; i++) {
     var newx = x + deltas[i][0]
@@ -90,6 +83,20 @@ Board.prototype.knightMoves = function(color, x, y) {
   }
 
   return answer
+}
+
+// A list of [x, y] coords that a knight can move to.
+// This ignores "no moving into check".
+Board.prototype.knightMoves = function(color, x, y) {
+  var deltas = [[1, 2],
+                [2, 1],
+                [-1, 2],
+                [2, -1],
+                [1, -2],
+                [-2, 1],
+                [-1, -2],
+                [-2, -1]]
+  return this.hopMoves(deltas, color, x, y)
 }
 
 // Testing
