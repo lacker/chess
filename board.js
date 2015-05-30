@@ -99,6 +99,22 @@ Board.prototype.knightMoves = function(color, x, y) {
   return this.hopMoves(deltas, color, x, y)
 }
 
+var BISHOP_STEPS = [[1, 1],
+                     [-1, 1],
+                     [-1, -1],
+                     [1, -1]]
+var ROOK_STEPS = [[1, 0],
+                   [0, 1],
+                   [-1, 0],
+                   [0, -1]]
+var QUEEN_STEPS = BISHOP_STEPS.concat(ROOK_STEPS)
+
+// A list of [x, y] coords that a king can move to.
+// This ignores "no moving into check".
+Board.prototype.kingMoves = function(color, x, y) {
+  return this.hopMoves(QUEEN_STEPS, color, x, y)
+}
+
 // Testing
 
 function testEq(name, foo, bar) {
@@ -114,3 +130,4 @@ testEq("colorForCoords", WHITE, b.colorForCoords(6, 1))
 testEq("colorForCoords", BLACK, b.colorForCoords(3, 7))
 testEq("colorForCoords", EMPTY, b.colorForCoords(2, 2))
 testEq("knightMoves", 2, b.knightMoves(WHITE, 1, 0).length)
+testEq("kingMoves", 0, b.kingMoves(WHITE, 4, 0).length)
