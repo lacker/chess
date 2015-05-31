@@ -154,6 +154,43 @@ Board.prototype.queenMoves = function(color, x, y) {
   return this.slideMoves(QUEEN_STEPS, color, x, y)
 }
 
+// TODO: test this after we have some better gameplay helpers
+Board.prototype.pawnMoves = function(color, x, y) {
+  var answer = []
+  if (validCoords(x, y + color) &&
+      this.colorForCoords(x, y + color) == EMPTY) {
+    // We can push this pawn one square
+    answer.push([x, y + color])
+
+    if ((y == 1 && color == WHITE) ||
+        (y == 6 && color == BLACK)) {
+      // This pawn is in the right location to do a double-push
+      if (this.colorForCoords(x, y + 2 * color) == EMPTY) {
+        // We can push this pawn two squares
+        answer.push([x, y + 2 * color])
+      }
+    }
+  }
+
+  // Captures
+  var newxs = [x - 1, x + 1]
+  for (var i = 0; i < newxs.length; i++) {
+    var newx = newxs[i]
+    if (validCoords(newx, y + color) &&
+        (this.colorForCoords(newx, y + color) == -color)) {
+      // We can capture normally
+      answer.push([newx, y + color])
+    } else if (this.passant != null &&
+               this.passant[0] == newx &&
+               this.passant[1] == y + color) {
+      // We can capture en passant
+      answer.push([newx, y + color])
+    }
+  }
+
+  return answer
+}
+
 // Testing
 
 function testEq(name, foo, bar) {
