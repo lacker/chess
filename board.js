@@ -1,7 +1,8 @@
 #!/usr/local/bin/node
 // Written for node v0.10.20
-// TODO: convert to ES6
-// TODO: use modules
+
+// TODO: don't allow moving into or castling through check
+
 
 // The chess colors. Convenient for multiplying vectors.
 var WHITE = 1
@@ -86,7 +87,6 @@ Board.prototype.hopMoves = function(deltas, color, x, y) {
 }
 
 // A list of [x, y] coords that a knight can move to.
-// This ignores "no moving into check".
 Board.prototype.knightMoves = function(color, x, y) {
   var deltas = [[1, 2],
                 [2, 1],
@@ -110,9 +110,27 @@ var ROOK_STEPS = [[1, 0],
 var QUEEN_STEPS = BISHOP_STEPS.concat(ROOK_STEPS)
 
 // A list of [x, y] coords that a king can move to.
-// This ignores "no moving into check".
 Board.prototype.kingMoves = function(color, x, y) {
-  return this.hopMoves(QUEEN_STEPS, color, x, y)
+  var answer = this.hopMoves(QUEEN_STEPS, color, x, y)
+
+  // Add castling
+  var castley = (color == WHITE ? 0 : 7)
+  var rook = (color == WHITE ? "R" : "r")
+  if (y == castley && x == 4) {
+    if (this.colorForCoords(5, castley) == EMPTY &&
+        this.colorForCoords(6, castley) == EMPTY &&
+        this.pieceForCoords(7, castley) == rook) {
+      answer.push([6, castley])
+    }
+    if (this.colorForCoords(3, castley) == EMPTY &&
+        this.colorForCoords(2, castley) == EMPTY &&
+        this.colorForCoords(1, castley) == EMPTY &&
+        this.pieceForCoords(0, castley) == rook) {
+      answer.push([2, castley])
+    }
+  }
+
+  return answer
 }
 
 // A list of [x, y] coords that a piece can move to, if its valid
