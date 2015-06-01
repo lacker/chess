@@ -274,6 +274,18 @@ Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
   this.turn = -this.turn
 }
 
+Board.prototype.canTakeKing = function() {
+  var moves = this.validMovesIgnoringCheck()
+  for (var i = 0; i < moves.length; i++) {
+    var x = moves[i][2]
+    var y = moves[i][3]
+    if (this.board[x][y].toUpperCase() == "K") {
+      return true
+    }
+  }
+  return false
+}
+
 // Testing
 
 function testEq(name, foo, bar) {
