@@ -1,9 +1,6 @@
 #!/usr/local/bin/node
 // Written for node v0.10.20
 
-// TODO: don't allow moving into or castling through check
-
-
 // The chess colors. Convenient for multiplying vectors.
 var WHITE = 1
 var EMPTY = 0
@@ -265,6 +262,16 @@ Board.prototype.validMovesIgnoringCheck = function() {
   }
 
   return answer
+}
+
+Board.prototype.copy = function() {
+  return new Board(this.stringify())
+}
+
+Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
+  this.board[toX][toY] = this.board[fromX][fromY]
+  this.board[fromX][fromY] = "."
+  this.turn = -this.turn
 }
 
 // Testing
