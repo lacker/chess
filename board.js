@@ -212,10 +212,10 @@ Board.prototype.pawnMoves = function(x, y) {
   return answer
 }
 
-// Currently this ignores the rule that you cannot move into or castle
-// through check.
+// This finds all the valid moves if you allow the mover to create a
+// situation in which they are in check, or castle through check.
 // Returns a list of moves in [fromx, fromy, tox, toy] format.
-Board.prototype.validMoves = function() {
+Board.prototype.validMovesIgnoringCheck = function() {
   var answer = []
   for (var x = 0; x < 8; x++) {
     for (var y = 0; y < 8; y++) {
@@ -271,4 +271,4 @@ testEq("kingMoves", 0, b.kingMoves(4, 0).length)
 testEq("bishopMoves", 8, b.bishopMoves(3, 3).length)
 testEq("rookMoves", 11, b.rookMoves(3, 3).length)
 testEq("queenMoves", 19, b.queenMoves(3, 3).length)
-testEq("validMoves", 20, b.validMoves().length)
+testEq("validMovesIgnoringCheck", 20, b.validMovesIgnoringCheck().length)
