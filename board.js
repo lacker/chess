@@ -23,6 +23,9 @@ function Board() {
                 "NP....pn",
                 "RP....pr"]
 
+  // Whose turn it is to move
+  this.turn = WHITE
+
   // The square that an en-passant capture can move into.
   // null if there is none
   this.passant = null
@@ -72,13 +75,13 @@ Board.prototype.pieceForSquare = function(square) {
 // A list of [x, y] coords that a piece can move to, if its valid
 // moves are given by the provided list of [dx, dy] hop deltas.
 // (Useful for kings and knights.)
-Board.prototype.hopMoves = function(deltas, color, x, y) {
+Board.prototype.hopMoves = function(deltas, x, y) {
   var answer = []
   for (var i = 0; i < deltas.length; i++) {
     var newx = x + deltas[i][0]
     var newy = y + deltas[i][1]
     if (validCoords(newx, newy) &&
-        this.colorForCoords(newx, newy) != color) {
+        this.colorForCoords(newx, newy) != this.turn) {
       answer.push([newx, newy])
     }
   }
@@ -87,7 +90,7 @@ Board.prototype.hopMoves = function(deltas, color, x, y) {
 }
 
 // A list of [x, y] coords that a knight can move to.
-Board.prototype.knightMoves = function(color, x, y) {
+Board.prototype.knightMoves = function(x, y) {
   var deltas = [[1, 2],
                 [2, 1],
                 [-1, 2],
@@ -96,7 +99,7 @@ Board.prototype.knightMoves = function(color, x, y) {
                 [-2, 1],
                 [-1, -2],
                 [-2, -1]]
-  return this.hopMoves(deltas, color, x, y)
+  return this.hopMoves(deltas, x, y)
 }
 
 var BISHOP_STEPS = [[1, 1],
@@ -110,12 +113,12 @@ var ROOK_STEPS = [[1, 0],
 var QUEEN_STEPS = BISHOP_STEPS.concat(ROOK_STEPS)
 
 // A list of [x, y] coords that a king can move to.
-Board.prototype.kingMoves = function(color, x, y) {
-  var answer = this.hopMoves(QUEEN_STEPS, color, x, y)
+Board.prototype.kingMoves = function(x, y) {
+  var answer = this.hopMoves(QUEEN_STEPS, x, y)
 
   // Add castling
-  var castley = (color == WHITE ? 0 : 7)
-  var rook = (color == WHITE ? "R" : "r")
+  var castley = (this.turn == WHITE ? 0 : 7)
+  var rook = (this.turn == WHITE ? "R" : "r")
   if (y == castley && x == 4) {
     if (this.colorForCoords(5, castley) == EMPTY &&
         this.colorForCoords(6, castley) == EMPTY &&
@@ -136,7 +139,7 @@ Board.prototype.kingMoves = function(color, x, y) {
 // A list of [x, y] coords that a piece can move to, if its valid
 // moves are given by the provided list of deltas, plus it can repeat
 // them as much as it wants.
-Board.prototype.slideMoves = function(deltas, color, x, y) {
+Board.prototype.slideMoves = function(deltas, x, y) {
   var answer = []
   for (var i = 0; i < deltas.length; i++) {
     var dx = deltas[i][0]
@@ -150,11 +153,11 @@ Board.prototype.slideMoves = function(deltas, color, x, y) {
         break
       }
       var colorAt = this.colorForCoords(newx, newy)
-      if (colorAt == color) {
+      if (colorAt == this.turn) {
         break
       }
       answer.push([newx, newy])
-      if (colorAt == -color) {
+      if (colorAt == -this.turn) {
         break
       }
     }
@@ -162,30 +165,30 @@ Board.prototype.slideMoves = function(deltas, color, x, y) {
   return answer
 }
 
-Board.prototype.bishopMoves = function(color, x, y) {
-  return this.slideMoves(BISHOP_STEPS, color, x, y)
+Board.prototype.bishopMoves = function(x, y) {
+  return this.slideMoves(BISHOP_STEPS, x, y)
 }
-Board.prototype.rookMoves = function(color, x, y) {
-  return this.slideMoves(ROOK_STEPS, color, x, y)
+Board.prototype.rookMoves = function(x, y) {
+  return this.slideMoves(ROOK_STEPS, x, y)
 }
-Board.prototype.queenMoves = function(color, x, y) {
-  return this.slideMoves(QUEEN_STEPS, color, x, y)
+Board.prototype.queenMoves = function(x, y) {
+  return this.slideMoves(QUEEN_STEPS, x, y)
 }
 
 // TODO: test this after we have some better gameplay helpers
-Board.prototype.pawnMoves = function(color, x, y) {
+Board.prototype.pawnMoves = function(x, y) {
   var answer = []
-  if (validCoords(x, y + color) &&
-      this.colorForCoords(x, y + color) == EMPTY) {
+  if (validCoords(x, y + this.turn) &&
+      this.colorForCoords(x, y + this.turn) == EMPTY) {
     // We can push this pawn one square
-    answer.push([x, y + color])
+    answer.push([x, y + this.turn])
 
-    if ((y == 1 && color == WHITE) ||
-        (y == 6 && color == BLACK)) {
+    if ((y == 1 && this.turn == WHITE) ||
+        (y == 6 && this.turn == BLACK)) {
       // This pawn is in the right location to do a double-push
-      if (this.colorForCoords(x, y + 2 * color) == EMPTY) {
+      if (this.colorForCoords(x, y + 2 * this.turn) == EMPTY) {
         // We can push this pawn two squares
-        answer.push([x, y + 2 * color])
+        answer.push([x, y + 2 * this.turn])
       }
     }
   }
@@ -194,19 +197,26 @@ Board.prototype.pawnMoves = function(color, x, y) {
   var newxs = [x - 1, x + 1]
   for (var i = 0; i < newxs.length; i++) {
     var newx = newxs[i]
-    if (validCoords(newx, y + color) &&
-        (this.colorForCoords(newx, y + color) == -color)) {
+    if (validCoords(newx, y + this.turn) &&
+        (this.colorForCoords(newx, y + this.turn) == -this.turn)) {
       // We can capture normally
-      answer.push([newx, y + color])
+      answer.push([newx, y + this.turn])
     } else if (this.passant != null &&
                this.passant[0] == newx &&
-               this.passant[1] == y + color) {
+               this.passant[1] == y + this.turn) {
       // We can capture en passant
-      answer.push([newx, y + color])
+      answer.push([newx, y + this.turn])
     }
   }
 
   return answer
+}
+
+// Currently this ignores the rule that you cannot move into or castle
+// through check.
+// Returns a list of moves in [fromx, fromy, tox, toy] format.
+Board.prototype.validMoves = function() {
+
 }
 
 // Testing
@@ -223,8 +233,8 @@ testEq("validCoords", false, validCoords(4, 8))
 testEq("colorForCoords", WHITE, b.colorForCoords(6, 1))
 testEq("colorForCoords", BLACK, b.colorForCoords(3, 7))
 testEq("colorForCoords", EMPTY, b.colorForCoords(2, 2))
-testEq("knightMoves", 2, b.knightMoves(WHITE, 1, 0).length)
-testEq("kingMoves", 0, b.kingMoves(WHITE, 4, 0).length)
-testEq("bishopMoves", 8, b.bishopMoves(WHITE, 3, 3).length)
-testEq("rookMoves", 11, b.rookMoves(WHITE, 3, 3).length)
-testEq("queenMoves", 19, b.queenMoves(WHITE, 3, 3).length)
+testEq("knightMoves", 2, b.knightMoves(1, 0).length)
+testEq("kingMoves", 0, b.kingMoves(4, 0).length)
+testEq("bishopMoves", 8, b.bishopMoves(3, 3).length)
+testEq("rookMoves", 11, b.rookMoves(3, 3).length)
+testEq("queenMoves", 19, b.queenMoves(3, 3).length)
