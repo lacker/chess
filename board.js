@@ -14,14 +14,14 @@ function Board() {
   // Standard chess notation for pieces, caps is white, . is empty.
   // [0][0] is a1, [7][0] is h1, [7][7] is h8.
   // Typically we refer to these two indices as x and y.
-  this.board = ["RP....pr",
-                "NP....pn",
-                "BP....pb",
-                "QP....pq",
-                "KP....pk",
-                "BP....pb",
-                "NP....pn",
-                "RP....pr"]
+  this.board = [["R","P",".",".",".",".","p","r"],
+                ["N","P",".",".",".",".","p","n"],
+                ["B","P",".",".",".",".","p","b"],
+                ["Q","P",".",".",".",".","p","q"],
+                ["K","P",".",".",".",".","p","k"],
+                ["B","P",".",".",".",".","p","b"],
+                ["N","P",".",".",".",".","p","n"],
+                ["R","P",".",".",".",".","p","r"]]
 
   // Whose turn it is to move
   this.turn = WHITE
