@@ -122,13 +122,13 @@ Board.prototype.kingMoves = function(x, y) {
   if (y == castley && x == 4) {
     if (this.colorForCoords(5, castley) == EMPTY &&
         this.colorForCoords(6, castley) == EMPTY &&
-        this.pieceForCoords(7, castley) == rook) {
+        this.board[7][castley] == rook) {
       answer.push([6, castley])
     }
     if (this.colorForCoords(3, castley) == EMPTY &&
         this.colorForCoords(2, castley) == EMPTY &&
         this.colorForCoords(1, castley) == EMPTY &&
-        this.pieceForCoords(0, castley) == rook) {
+        this.board[0][castley] == rook) {
       answer.push([2, castley])
     }
   }
@@ -216,7 +216,40 @@ Board.prototype.pawnMoves = function(x, y) {
 // through check.
 // Returns a list of moves in [fromx, fromy, tox, toy] format.
 Board.prototype.validMoves = function() {
+  var answer = []
+  for (var x = 0; x < 8; x++) {
+    for (var y = 0; y < 8; y++) {
+      if (this.colorForCoords(x, y) != this.turn) {
+        continue
+      }
 
+      var piece = this.board[x][y].toUpperCase()
+      switch(piece) {
+      case "R":
+        answer = answer.concat(this.rookMoves(x, y))
+        break
+      case "N":
+        answer = answer.concat(this.knightMoves(x, y))
+        break
+      case "B":
+        answer = answer.concat(this.bishopMoves(x, y))
+        break
+      case "Q":
+        answer = answer.concat(this.queenMoves(x, y))
+        break
+      case "K":
+        answer = answer.concat(this.kingMoves(x, y))
+        break
+      case "P":
+        answer = answer.concat(this.pawnMoves(x, y))
+        break
+      default:
+        throw ("unrecognized piece: " + piece)
+      }
+    }
+  }
+
+  return answer
 }
 
 // Testing
@@ -238,3 +271,4 @@ testEq("kingMoves", 0, b.kingMoves(4, 0).length)
 testEq("bishopMoves", 8, b.bishopMoves(3, 3).length)
 testEq("rookMoves", 11, b.rookMoves(3, 3).length)
 testEq("queenMoves", 19, b.queenMoves(3, 3).length)
+testEq("validMoves", 20, b.validMoves().length)
