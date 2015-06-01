@@ -9,26 +9,32 @@ var WHITE = 1
 var EMPTY = 0
 var BLACK = -1
 
-function Board() {
+// Can also reinflate a board that was stringified.
+function Board(data) {
+  if (typeof data == "string") {
+    data = JSON.parse(data)
+  }
+
   // Each square's content has a character representation.
   // Standard chess notation for pieces, caps is white, . is empty.
   // [0][0] is a1, [7][0] is h1, [7][7] is h8.
   // Typically we refer to these two indices as x and y.
-  this.board = [["R","P",".",".",".",".","p","r"],
-                ["N","P",".",".",".",".","p","n"],
-                ["B","P",".",".",".",".","p","b"],
-                ["Q","P",".",".",".",".","p","q"],
-                ["K","P",".",".",".",".","p","k"],
-                ["B","P",".",".",".",".","p","b"],
-                ["N","P",".",".",".",".","p","n"],
-                ["R","P",".",".",".",".","p","r"]]
+  this.board = (data && data.board) ||
+    [["R","P",".",".",".",".","p","r"],
+     ["N","P",".",".",".",".","p","n"],
+     ["B","P",".",".",".",".","p","b"],
+     ["Q","P",".",".",".",".","p","q"],
+     ["K","P",".",".",".",".","p","k"],
+     ["B","P",".",".",".",".","p","b"],
+     ["N","P",".",".",".",".","p","n"],
+     ["R","P",".",".",".",".","p","r"]]
 
   // Whose turn it is to move
-  this.turn = WHITE
+  this.turn = (data && data.turn) || WHITE
 
   // The square that an en-passant capture can move into.
   // null if there is none
-  this.passant = null
+  this.passant = (data && data.passant) || null
 }
 
 // "a1" -> [0, 0]
@@ -58,6 +64,15 @@ function colorForPiece(piece) {
     return EMPTY
   }
   throw ("invalid piece: " + piece)
+}
+
+// Converts to JSON. The constructor accepts this
+Board.prototype.stringify = function() {
+  return JSON.stringify({
+    board: this.board,
+    passant: this.passant,
+    turn: this.turn
+  })
 }
 
 Board.prototype.colorForCoords = function(x, y) {
