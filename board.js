@@ -269,9 +269,19 @@ Board.prototype.copy = function() {
 }
 
 Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
-  this.board[toX][toY] = this.board[fromX][fromY]
+  var piece = this.board[fromX][fromY]
+  this.board[toX][toY] = piece
   this.board[fromX][fromY] = "."
   this.turn = -this.turn
+
+  // TODO: remove pawns that were captured en passant
+
+  // Track the en passant square
+  if (piece.toUpperCase() == "P" && Math.abs(fromY - toY) == 2) {
+    this.passant = [fromX, (fromY + toY) / 2]
+  } else {
+    this.passant = null
+  }
 }
 
 Board.prototype.canTakeKing = function() {
