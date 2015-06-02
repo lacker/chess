@@ -270,11 +270,22 @@ Board.prototype.copy = function() {
 
 Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
   var piece = this.board[fromX][fromY]
-  this.board[toX][toY] = piece
+  var isPawn = piece.toUpperCase() == "P"
+
+  // Remove pawns that were captured en passant
+  if (isPawn && fromX != toX && this.board[toX][toY] == ".") {
+    // It's an en passant capture
+    this.board[toX][fromY] = "."
+  }
+
+  var queenY = (this.turn == WHITE ? 7 : 0)
+  if (isPawn && toY == queenY) {
+    this.board[toX][toY] = (this.turn == WHITE ? "Q" : "q")
+  } else {
+    this.board[toX][toY] = piece
+  }
   this.board[fromX][fromY] = "."
   this.turn = -this.turn
-
-  // TODO: remove pawns that were captured en passant
 
   // Track the en passant square
   if (piece.toUpperCase() == "P" && Math.abs(fromY - toY) == 2) {
