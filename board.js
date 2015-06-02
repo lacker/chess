@@ -125,27 +125,9 @@ var ROOK_STEPS = [[1, 0],
 var QUEEN_STEPS = BISHOP_STEPS.concat(ROOK_STEPS)
 
 // A list of [x, y] coords that a king can move to.
+// Does not count castling.
 Board.prototype.kingMoves = function(x, y) {
-  var answer = this.hopMoves(QUEEN_STEPS, x, y)
-
-  // Add castling
-  var castley = (this.turn == WHITE ? 0 : 7)
-  var rook = (this.turn == WHITE ? "R" : "r")
-  if (y == castley && x == 4) {
-    if (this.colorForCoords(5, castley) == EMPTY &&
-        this.colorForCoords(6, castley) == EMPTY &&
-        this.board[7][castley] == rook) {
-      answer.push([6, castley])
-    }
-    if (this.colorForCoords(3, castley) == EMPTY &&
-        this.colorForCoords(2, castley) == EMPTY &&
-        this.colorForCoords(1, castley) == EMPTY &&
-        this.board[0][castley] == rook) {
-      answer.push([2, castley])
-    }
-  }
-
-  return answer
+  return this.hopMoves(QUEEN_STEPS, x, y)
 }
 
 // A list of [x, y] coords that a piece can move to, if its valid
@@ -268,6 +250,16 @@ Board.prototype.copy = function() {
   return new Board(this.stringify())
 }
 
+Board.prototype.isKingsideCastle = function(fromX, fromY, toX, toY) {
+  var piece = this.board[fromX][fromY]
+  return (piece.toUpperCase() == "K" && fromX == 4 && toX == 6)
+}
+
+Board.prototype.isQueensideCastle = function(fromX, fromY, toX, toY) {
+  var piece = this.board[fromX][fromY]
+  return (piece.toUpperCase() == "K" && fromX == 4 && toX == 2)
+}
+
 Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
   var piece = this.board[fromX][fromY]
   var isPawn = piece.toUpperCase() == "P"
@@ -293,6 +285,18 @@ Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
   } else {
     this.passant = null
   }
+
+  // Kingside castling
+  if (this.isKingsideCastle(fromX, fromY, toX, toY)) {
+    this.board[5][fromY] = this.board[7][fromY]
+    this.board[7][fromY] = "."
+  }
+
+  // Queenside castling
+  if (this.isQueensideCastle(fromX, fromY, toX, toY)) {
+    this.board[3][fromY] = this.board[0][fromY]
+    this.board[0][fromY] = "."
+  }
 }
 
 Board.prototype.canTakeKing = function() {
@@ -305,6 +309,59 @@ Board.prototype.canTakeKing = function() {
     }
   }
   return false
+}
+
+Board.prototype.isCheck = function() {
+  var copy = this.copy()
+  return copy.canTakeKing()
+}
+
+Board.prototype.movesIntoCheck = function(fromX, fromY, toX, toY) {
+  var copy = this.copy()
+  copy.makeMove(fromX, fromY, toX, toY)
+  return copy.canTakeKing()
+}
+
+// This does not allow moving into check.
+// This does include castling.
+// This does not allow castling through check.
+// TODO: disallow castling after king/rook moves.
+Board.prototype.validMoves = function() {
+  var answer = []
+  var possible = this.validMovesIgnoringCheck()
+  for (var i = 0; i > possible.length; i++) {
+    var fromX = possible[i][0]
+    var fromY = possible[i][1]
+    var toX = possible[i][2]
+    var toY = possible[i][3]
+    if (!this.movesIntoCheck(fromX, fromY, toX, toY)) {
+      answer.push([fromX, fromY, toX, toY])
+    }
+  }
+
+  // Add castling.
+  var castley = (this.turn == WHITE ? 0 : 7)
+  var king = (this.turn == WHITE ? "K" : "k")
+  var rook = (this.turn == WHITE ? "R" : "r")
+  if (!this.isCheck() && this.board[4][castley] == king) {
+    if (this.colorForCoords(5, castley) == EMPTY &&
+        this.colorForCoords(6, castley) == EMPTY &&
+        this.board[7][castley] == rook &&
+        !this.movesIntoCheck(4, castley, 5, castley) &&
+        !this.movesIntoCheck(4, castley, 6, castley)) {
+      answer.push([4, castley, 6, castley])
+    }
+    if (this.colorForCoords(3, castley) == EMPTY &&
+        this.colorForCoords(2, castley) == EMPTY &&
+        this.colorForCoords(1, castley) == EMPTY &&
+        this.board[0][castley] == rook &&
+        !this.movesIntoCheck(4, castley, 3, castley) &&
+        !this.movesIntoCheck(4, castley, 2, castley)) {
+      answer.push([4, castley, 2, castley])
+    }
+  }
+
+  return answer
 }
 
 // Testing
