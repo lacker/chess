@@ -40,15 +40,15 @@ function coordsForSquare(square) {
           square[1].charCodeAt(0) - "1".charCodeAt(0)]
 }
 
-// Converts long algebraic notation into a "move" like we use.
-// I.e., "e2-e4" -> [4, 1, 4, 3]
-function moveForLongAlgebraic(alg) {
-  var parts = alg.split("-")
-  if (parts.length != 2) {
-    throw "bad alg: " + alg
+// Converts Smith notation into a "move" like we use.
+// Only handles len-4 Smith notation.
+// I.e., "e2e4" -> [4, 1, 4, 3]
+function moveForSmith(smith) {
+  if (smith.length != 4) {
+    throw "bad smith: " + smith
   }
-  var fromCoords = coordsForSquare(alg[0])
-  var toCoords = coordsForSquare(alg[1])
+  var fromCoords = coordsForSquare(smith[0] + smith[1])
+  var toCoords = coordsForSquare(smith[2] + smith[3])
   return fromCoords.concat(toCoords)
 }
 
