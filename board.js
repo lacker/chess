@@ -407,8 +407,25 @@ function testEq(name, foo, bar) {
 
 // Asserts that the provided list of moves, in long algebraic
 // notation, is valid and ends in checkmate.
-function testCheckmate(moves) {
-  throw "TODO"
+function testCheckmate(name, moves) {
+  var board = new Board()
+  for (var i = 0; i < moves.length; i++) {
+    var move = coordsFromSmith(moves[i])
+    var fromX = move[0]
+    var fromY = move[1]
+    var toX = move[2]
+    var toY = move[3]
+    
+    if (!board.isValidMove(fromX, fromY, toX, toY)) {
+      throw "in game " + name + ", invalid move: " + moves[i]
+    }
+
+    board.makeMove(fromX, fromY, toX, toY)
+  }
+
+  if (!board.isCheckmate()) {
+    throw "game " + name + " did not end in checkmate"
+  }
 }
 
 var b = new Board()
