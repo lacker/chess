@@ -1,4 +1,4 @@
 chess
 =====
 
-Random fun chess-related stuff.
+A JS chess implementation.
