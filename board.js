@@ -364,6 +364,19 @@ Board.prototype.validMoves = function() {
   return answer
 }
 
+Board.prototype.isValidMove = function(fromX, fromY, toX, toY) {
+  var valids = this.validMoves()
+  for (var i = 0; i < valids; i++) {
+    if (fromX == valids[i][0] &&
+        fromY == valids[i][1] &&
+        toX == valids[i][2] &&
+        toY == valids[i][3]) {
+      return true
+    }
+  }
+  return false
+}
+
 // Testing
 
 function testEq(name, foo, bar) {
