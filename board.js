@@ -440,3 +440,9 @@ testEq("bishopMoves", 8, b.bishopMoves(3, 3).length)
 testEq("rookMoves", 11, b.rookMoves(3, 3).length)
 testEq("queenMoves", 19, b.queenMoves(3, 3).length)
 testEq("validMovesIgnoringCheck", 20, b.validMovesIgnoringCheck().length)
+
+testCheckmate("scholars mate", [
+  "e2e4", "e7e5",
+  "f1c4", "h7h6",
+  "d1f3", "h6h5",
+  "f3f7"])
