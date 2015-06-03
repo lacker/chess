@@ -6,6 +6,10 @@ var WHITE = 1
 var EMPTY = 0
 var BLACK = -1
 
+function jlog(x) {
+  console.log(JSON.stringify(x))
+}
+
 // Can also reinflate a board that was stringified.
 function Board(data) {
   if (typeof data == "string") {
@@ -348,7 +352,7 @@ Board.prototype.movesIntoCheck = function(fromX, fromY, toX, toY) {
 Board.prototype.validMoves = function() {
   var answer = []
   var possible = this.validMovesIgnoringCheck()
-  for (var i = 0; i > possible.length; i++) {
+  for (var i = 0; i < possible.length; i++) {
     var fromX = possible[i][0]
     var fromY = possible[i][1]
     var toX = possible[i][2]
@@ -441,9 +445,7 @@ testEq("queenMoves", 19, b.queenMoves(3, 3).length)
 testEq("validMovesIgnoringCheck", 20, b.validMovesIgnoringCheck().length)
 testEq("movesIntoCheck", false, b.movesIntoCheck(0, 1, 0, 2))
 testEq("validMoves", 20, b.validMoves().length)
-
-console.log(JSON.stringify(b.validMovesIgnoringCheck()))
-console.log(JSON.stringify(b.validMoves()))
+testEq("isValidMove", true, b.isValidMove(0, 1, 0, 3))
 
 testCheckmate("scholars mate", [
   "e2e4", "e7e5",
