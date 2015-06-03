@@ -389,7 +389,7 @@ Board.prototype.validMoves = function() {
 
 Board.prototype.isValidMove = function(fromX, fromY, toX, toY) {
   var valids = this.validMoves()
-  for (var i = 0; i < valids; i++) {
+  for (var i = 0; i < valids.length; i++) {
     if (fromX == valids[i][0] &&
         fromY == valids[i][1] &&
         toX == valids[i][2] &&
