@@ -96,7 +96,7 @@ Board.prototype.pieceForSquare = function(square) {
   return this.board[x][y]
 }
 
-// A list of [x, y] coords that a piece can move to, if its valid
+// A list of moves that a piece can make, if its valid
 // moves are given by the provided list of [dx, dy] hop deltas.
 // (Useful for kings and knights.)
 Board.prototype.hopMoves = function(deltas, x, y) {
@@ -106,7 +106,7 @@ Board.prototype.hopMoves = function(deltas, x, y) {
     var newy = y + deltas[i][1]
     if (validCoords(newx, newy) &&
         this.colorForCoords(newx, newy) != this.turn) {
-      answer.push([newx, newy])
+      answer.push([x, y, newx, newy])
     }
   }
 
@@ -136,13 +136,13 @@ var ROOK_STEPS = [[1, 0],
                   [0, -1]]
 var QUEEN_STEPS = BISHOP_STEPS.concat(ROOK_STEPS)
 
-// A list of [x, y] coords that a king can move to.
+// A list of moves that a king on (x, y) can make.
 // Does not count castling.
 Board.prototype.kingMoves = function(x, y) {
   return this.hopMoves(QUEEN_STEPS, x, y)
 }
 
-// A list of [x, y] coords that a piece can move to, if its valid
+// A list of moves that a piece can make, if its valid
 // moves are given by the provided list of deltas, plus it can repeat
 // them as much as it wants.
 Board.prototype.slideMoves = function(deltas, x, y) {
@@ -162,7 +162,7 @@ Board.prototype.slideMoves = function(deltas, x, y) {
       if (colorAt == this.turn) {
         break
       }
-      answer.push([newx, newy])
+      answer.push([x, y, newx, newy])
       if (colorAt == -this.turn) {
         break
       }
@@ -181,20 +181,19 @@ Board.prototype.queenMoves = function(x, y) {
   return this.slideMoves(QUEEN_STEPS, x, y)
 }
 
-// TODO: test this after we have some better gameplay helpers
 Board.prototype.pawnMoves = function(x, y) {
   var answer = []
   if (validCoords(x, y + this.turn) &&
       this.colorForCoords(x, y + this.turn) == EMPTY) {
     // We can push this pawn one square
-    answer.push([x, y + this.turn])
+    answer.push([x, y, x, y + this.turn])
 
     if ((y == 1 && this.turn == WHITE) ||
         (y == 6 && this.turn == BLACK)) {
       // This pawn is in the right location to do a double-push
       if (this.colorForCoords(x, y + 2 * this.turn) == EMPTY) {
         // We can push this pawn two squares
-        answer.push([x, y + 2 * this.turn])
+        answer.push([x, y, x, y + 2 * this.turn])
       }
     }
   }
@@ -206,12 +205,12 @@ Board.prototype.pawnMoves = function(x, y) {
     if (validCoords(newx, y + this.turn) &&
         (this.colorForCoords(newx, y + this.turn) == -this.turn)) {
       // We can capture normally
-      answer.push([newx, y + this.turn])
+      answer.push([x, y, newx, y + this.turn])
     } else if (this.passant != null &&
                this.passant[0] == newx &&
                this.passant[1] == y + this.turn) {
       // We can capture en passant
-      answer.push([newx, y + this.turn])
+      answer.push([x, y, newx, y + this.turn])
     }
   }
 
