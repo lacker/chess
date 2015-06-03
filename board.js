@@ -410,7 +410,7 @@ function testEq(name, foo, bar) {
 function testCheckmate(name, moves) {
   var board = new Board()
   for (var i = 0; i < moves.length; i++) {
-    var move = coordsFromSmith(moves[i])
+    var move = moveForSmith(moves[i])
     var fromX = move[0]
     var fromY = move[1]
     var toX = move[2]
