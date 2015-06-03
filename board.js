@@ -88,6 +88,16 @@ Board.prototype.stringify = function() {
   })
 }
 
+Board.prototype.log = function() {
+  for (var y = 7; y >= 0; y--) {
+    var line = ""
+    for (var x = 0; x < 8; x++) {
+      line += this.board[x][y]
+    }
+    console.log(line)
+  }
+}
+
 Board.prototype.colorForCoords = function(x, y) {
   return colorForPiece(this.board[x][y])
 }
@@ -328,6 +338,7 @@ Board.prototype.canTakeKing = function() {
 
 Board.prototype.isCheck = function() {
   var copy = this.copy()
+  copy.turn = -copy.turn
   return copy.canTakeKing()
 }
 
@@ -427,6 +438,9 @@ function testCheckmate(name, moves) {
   }
 
   if (!board.isCheckmate()) {
+    board.log()
+    jlog(board.validMoves())
+    console.log("isCheck: " + board.isCheck())
     throw "game " + name + " did not end in checkmate"
   }
 }
