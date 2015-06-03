@@ -40,6 +40,18 @@ function coordsForSquare(square) {
           square[1].charCodeAt(0) - "1".charCodeAt(0)]
 }
 
+// Converts long algebraic notation into a "move" like we use.
+// I.e., "e2-e4" -> [4, 1, 4, 3]
+function moveForLongAlgebraic(alg) {
+  var parts = alg.split("-")
+  if (parts.length != 2) {
+    throw "bad alg: " + alg
+  }
+  var fromCoords = coordsForSquare(alg[0])
+  var toCoords = coordsForSquare(alg[1])
+  return fromCoords.concat(toCoords)
+}
+
 // (0, 0) -> "a1"
 function squareForCoords(x, y) {
   return (String.fromCharCode("a".charCodeAt(0) + x) +
@@ -316,6 +328,14 @@ Board.prototype.isCheck = function() {
   return copy.canTakeKing()
 }
 
+Board.prototype.isCheckmate = function() {
+  return this.validMoves().length == 0 && this.isCheck()
+}
+
+Board.prototype.isStalemate = function() {
+  return this.validMoves().length == 0 && !this.isCheck()
+}
+
 Board.prototype.movesIntoCheck = function(fromX, fromY, toX, toY) {
   var copy = this.copy()
   copy.makeMove(fromX, fromY, toX, toY)
@@ -383,6 +403,12 @@ function testEq(name, foo, bar) {
   if (foo != bar) {
     throw ("in " + name + " test: " + foo + " != " + bar)
   }
+}
+
+// Asserts that the provided list of moves, in long algebraic
+// notation, is valid and ends in checkmate.
+function testCheckmate(moves) {
+  throw "TODO"
 }
 
 var b = new Board()
