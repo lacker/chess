@@ -1,10 +1,10 @@
-#!/usr/local/bin/node
-// Written for node v0.10.20
+#!/usr/bin/env babel-node
+// Written for ES6.
 
 // The chess colors. Convenient for multiplying vectors.
-var WHITE = 1
-var EMPTY = 0
-var BLACK = -1
+const WHITE = 1
+const EMPTY = 0
+const BLACK = -1
 
 function jlog(x) {
   console.log(JSON.stringify(x))
