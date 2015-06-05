@@ -4,7 +4,8 @@
   "description": "A chess game",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "start": "webpack-dev-server --hot --progress --colors",
+    "build": "webpack --progress --colors"
   },
   "repository": {
     "type": "git",
