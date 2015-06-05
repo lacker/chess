@@ -1,2 +1,0 @@
-Run webpack --watch to autoupdate bundle.js
-Then index.html in the browser should look cool
