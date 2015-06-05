@@ -5,7 +5,7 @@ var webpack = require('webpack');
 module.exports = {  
   entry: [
     'webpack/hot/only-dev-server',
-    "./js/app.js"
+    "./js/web.js"
   ],
   output: {
     path: __dirname + '/build',
