@@ -1,6 +1,8 @@
 import React from 'react';  
 
-var board = require("")
+const board = require("./board.js")
+const Board = board.Board
+console.log("white = " + board.WHITE)
 
 let App = React.createClass({  
   render() {
