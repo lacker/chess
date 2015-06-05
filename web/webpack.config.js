@@ -7,8 +7,11 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: __dirname,
-        loader: 'babel-loader' }
+      { test: "\.js$",
+        loader: "babel-loader" }
     ]
+  },
+  resolveLoader: {
+    root: "/usr/local/lib/node_modules/"
   }
 };
