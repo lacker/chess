@@ -1,5 +1,7 @@
 import React from 'react';  
 
+var board = require("")
+
 let App = React.createClass({  
   render() {
     return (
