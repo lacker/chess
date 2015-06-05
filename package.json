@@ -1,0 +1,31 @@
+{
+  "name": "chess",
+  "version": "0.0.1",
+  "description": "A chess game",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lacker/chess.git"
+  },
+  "keywords": [
+    "chess"
+  ],
+  "author": "Kevin Lacker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lacker/chess/issues"
+  },
+  "devDependencies": {
+    "react-router": "~0.13.3",
+    "react-hot-loader": "~1.2.7",
+    "node-libs-browser": "~0.5.2",
+    "webpack": "~1.9.10",
+    "react": "~0.13.3",
+    "webpack-dev-server": "~1.9.0",
+    "babel-core": "~5.4.7",
+    "babel-loader": "~5.1.3"
+  }
+}
