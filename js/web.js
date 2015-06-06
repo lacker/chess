@@ -1,10 +1,13 @@
-import React from 'react';  
+import React from "react";  
 
 const board = require("./board.js")
-const Board = board.Board
 console.log("white = " + board.WHITE)
 
-let App = React.createClass({  
+const App = React.createClass({  
+  getInitialState() {
+    return { board: new board.Board() }
+  },
+
   render() {
     return (
       <div>
