@@ -11,9 +11,16 @@ const App = React.createClass({
   },
 
   render() {
+    let squares = []
+    for (let x = 0; x < 8; x++) {
+      for (let y = 0; y < 8; y++) {
+        squares.push(<Square x={x} y={y} />)
+      }
+    }
+
     return (
-      <div>
-        hello react world!
+      <div className="board">
+      {squares}
       </div>
     );
   }
