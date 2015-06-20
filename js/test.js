@@ -36,3 +36,12 @@ board.testCheckmate("scholars mate", [
 board.testCheckmate("fools mate", [
   "f2f4", "e7e5",
   "g2g4", "d8h4"])
+
+board.testCheckmate("castling", [
+  "e2e4", "e7e5",
+  "f1c4", "f8c5",
+  "d2d3", "g8f6",
+  "d1g4", "e8g8",
+  "c1h6", "a7a5",
+  "g4g7"])
+
