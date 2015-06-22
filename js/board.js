@@ -429,8 +429,23 @@ Board.prototype.isValidMove = function(fromX, fromY, toX, toY) {
   return false
 }
 
+// Throws if a move is invalid.
+// Moves are in long ("Smith") algebraic notation.
+Board.prototype.makeSmithMoves = function(moves) {
+  for (let move of moves) {
+    let [fromX, fromY, toX, toY] = moveForSmith(move)
+
+    if (!this.isValidMove(fromX, fromY, toX, toY)) {
+      throw "in game " + name + ", invalid move: " + move
+    }
+
+    this.makeMove(fromX, fromY, toX, toY)
+  }
+}
+
 // Asserts that the provided list of moves, in long algebraic
 // notation, is valid and ends in checkmate.
+// TODO: make this use makeSmithMoves
 function testCheckmate(name, moves) {
   let board = new Board()
   for (let move of moves) {
