@@ -91,8 +91,12 @@ function Board(data) {
   this.passant = (data && data.passant) || null
 
   // Whether a player can still castle in a direction.
-  this.kingsideOK = {BLACK: true, WHITE: true}
-  this.queensideOK = {BLACK: true, WHITE: true}
+  this.kingsideOK = {}
+  this.queensideOK = {}
+  for (let color of [BLACK, WHITE]) {
+    this.kingsideOK[color] = true
+    this.queensideOK[color] = true
+  }
 }
 
 // Converts to JSON. The constructor accepts this
@@ -235,7 +239,8 @@ Board.prototype.pawnMoves = function(x, y) {
 }
 
 // This finds all the valid moves if you allow the mover to create a
-// situation in which they are in check, or castle through check.
+// situation in which they are in check.
+// This does not include castling.
 // Returns a list of moves in [fromx, fromy, tox, toy] format.
 Board.prototype.validMovesIgnoringCheck = function() {
   let answer = []
