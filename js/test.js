@@ -45,3 +45,9 @@ board.testCheckmate("castling", [
   "c1h6", "a7a5",
   "g4g7"])
 
+board.testCheckmate("en passant", [
+  "e2e3", "e7e5",
+  "f1c4", "e5e4",
+  "d2d4", "e4d3",
+  "d1f3", "a7a5",
+  "f3f7"])
