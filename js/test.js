@@ -37,7 +37,7 @@ board.testCheckmate("fools mate", [
   "f2f4", "e7e5",
   "g2g4", "d8h4"])
 
-board.testCheckmate("castling", [
+board.testCheckmate("kingside castling", [
   "e2e4", "e7e5",
   "f1c4", "f8c5",
   "d2d3", "g8f6",
@@ -51,3 +51,10 @@ board.testCheckmate("en passant", [
   "d2d4", "e4d3",
   "d1f3", "a7a5",
   "f3f7"])
+
+board.newBoard("queenside castling", [
+  "d2d4", "d7d5",
+  "d1d3", "d8d6",
+  "c1d2", "c8d7",
+  "b1c3", "b8c6",
+  "e1c1", "e8c8"])

@@ -448,11 +448,19 @@ Board.prototype.makeSmithMoves = function(moves, name) {
   }
 }
 
+// Throws unless the provided list of moves, in long algebraic
+// notation, is valid.
+// Returns a board state 
+function newBoard(name, moves) {
+  let board = new Board()
+  board.makeSmithMoves(moves, name)
+  return board
+}
+
 // Asserts that the provided list of moves, in long algebraic
 // notation, is valid and ends in checkmate.
 function testCheckmate(name, moves) {
-  let board = new Board()
-  board.makeSmithMoves(moves, name)
+  let board = newBoard(name, moves)
 
   if (!board.isCheckmate()) {
     board.log()
@@ -468,3 +476,4 @@ exports.BLACK = BLACK
 exports.EMPTY = EMPTY
 exports.Board = Board
 exports.testCheckmate = testCheckmate
+exports.newBoard = newBoard
