@@ -1,10 +1,6 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
-'use strict';
+"use strict";
 
-var React = require('react-native');
+var React = require("react-native");
 var {
   AppRegistry,
   StyleSheet,
@@ -12,42 +8,45 @@ var {
   View,
 } = React;
 
-var Chess = React.createClass({
+var App = React.createClass({
   render: function() {
+
+    var squares = []
+    for (var x = 0; x < 8; x++) {
+      for (var y = 0; y < 8; y++) {
+        squares.push(<Square x={x} y={y} />)
+      }
+    }
+
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+      <View>
+        {squares}
       </View>
-    );
+    )
   }
-});
+})
+
+var Square = React.createClass({
+  render() {
+    if ((this.props.x + this.props.y) % 2 == 0) {
+      return <View style={[styles.square, styles.darkSquare]} />
+    } else {
+      return <View style={[styles.square, styles.lightSquare]} />
+    }
+  }
+})
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+  square: {
+    width: 50,
+    height: 50,
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  darkSquare: {
+    backgroundColor: "#333333",
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  lightSquare: {
+    backgroundColor: "#cccccc",
   },
 });
 
-AppRegistry.registerComponent('Chess', () => Chess);
+AppRegistry.registerComponent("Chess", () => App);
