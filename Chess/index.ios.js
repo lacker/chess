@@ -28,11 +28,17 @@ var App = React.createClass({
 
 var Square = React.createClass({
   render() {
-    if ((this.props.x + this.props.y) % 2 == 0) {
-      return <View style={[styles.square, styles.darkSquare]} />
-    } else {
-      return <View style={[styles.square, styles.lightSquare]} />
+    var location = {
+      left: this.props.x * 50,
+      top: this.props.y * 50,
     }
+    var colorStyle
+    if ((this.props.x + this.props.y) % 2 == 0) {
+      colorStyle = styles.darkSquare
+    } else {
+      colorStyle = styles.lightSquare
+    }
+    return <View style={[styles.square, colorStyle, location]} />
   }
 })
 
