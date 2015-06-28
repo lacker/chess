@@ -12,14 +12,14 @@ var App = React.createClass({
   render: function() {
 
     var squares = []
-    for (var x = 0; x < 8; x++) {
-      for (var y = 0; y < 8; y++) {
+    for (var y = 0; y < 8; y++) {
+      for (var x = 0; x < 8; x++) {
         squares.push(<Square x={x} y={y} />)
       }
     }
 
     return (
-      <View>
+      <View style={styles.board}>
         {squares}
       </View>
     )
@@ -28,24 +28,34 @@ var App = React.createClass({
 
 var Square = React.createClass({
   render() {
-    var location = {
-      left: this.props.x * 50,
-      top: this.props.y * 50,
-    }
     var colorStyle
     if ((this.props.x + this.props.y) % 2 == 0) {
       colorStyle = styles.darkSquare
     } else {
       colorStyle = styles.lightSquare
     }
-    return <View style={[styles.square, colorStyle, location]} />
+    return (
+        <View style={[styles.square, colorStyle]}>
+        <Text>
+        {this.props.x + "," + this.props.y}
+        </Text>
+        </View>
+    )
   }
 })
 
+var CELL = 50
+
 var styles = StyleSheet.create({
+  board: {
+    width: CELL * 8,
+    height: CELL * 8,
+    flexWrap: "wrap",
+    flexDirection: "row",
+  },
   square: {
-    width: 50,
-    height: 50,
+    width: CELL,
+    height: CELL,
   },
   darkSquare: {
     backgroundColor: "#333333",
