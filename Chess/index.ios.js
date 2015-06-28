@@ -12,7 +12,7 @@ var App = React.createClass({
   render: function() {
 
     var squares = []
-    for (var y = 0; y < 8; y++) {
+    for (var y = 7; y >= 0; y--) {
       for (var x = 0; x < 8; x++) {
         squares.push(<Square x={x} y={y} />)
       }
