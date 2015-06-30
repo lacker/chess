@@ -7,6 +7,13 @@ var {
   Text,
   View,
 } = React;
+var BoardLib = require("./board")
+var {
+  WHITE,
+  BLACK,
+  EMPTY,
+  Board,
+} = BoardLib;
 
 var App = React.createClass({
   render: function() {
