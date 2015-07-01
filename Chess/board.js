@@ -362,11 +362,10 @@ Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
   }
 }
 
-/*
-
 Board.prototype.canTakeKing = function() {
   var moves = this.validMovesIgnoringCheck()
-  for (var [_, _, x, y] of moves) {
+  for (var xy of moves) {
+    var [_, _, x, y] = xy
     if (this.board[x][y].toUpperCase() === "K") {
       return true
     }
@@ -401,7 +400,8 @@ Board.prototype.movesIntoCheck = function(fromX, fromY, toX, toY) {
 Board.prototype.validMoves = function() {
   var answer = []
   var possible = this.validMovesIgnoringCheck()
-  for (var [fromX, fromY, toX, toY] of possible) {
+  for (var coords of possible) {
+    var [fromX, fromY, toX, toY] = coords
     if (!this.movesIntoCheck(fromX, fromY, toX, toY)) {
       answer.push([fromX, fromY, toX, toY])
     }
@@ -488,4 +488,3 @@ exports.Board = Board
 exports.testCheckmate = testCheckmate
 exports.newBoard = newBoard
 
-*/
