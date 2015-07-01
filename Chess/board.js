@@ -102,6 +102,9 @@ function Board(data) {
   }
 }
 
+
+
+
 // Converts to JSON. The constructor accepts this
 Board.prototype.stringify = function() {
   return JSON.stringify({
@@ -138,7 +141,8 @@ Board.prototype.pieceForSquare = function(square) {
 // (Useful for kings and knights.)
 Board.prototype.hopMoves = function(deltas, x, y) {
   var answer = []
-  for (var [dx, dy] of deltas) {
+  for (var dxdy of deltas) {
+    var [dx, dy] = dxdy
     var newx = x + dx
     var newy = y + dy
     if (validCoords(newx, newy) &&
@@ -174,7 +178,8 @@ Board.prototype.kingMoves = function(x, y) {
 // them as much as it wants.
 Board.prototype.slideMoves = function(deltas, x, y) {
   var answer = []
-  for (var [dx, dy] of deltas) {
+  for (var dxdy of deltas) {
+    var [dx, dy] = dxdy
     var newx = x
     var newy = y
     while (true) {
@@ -357,6 +362,8 @@ Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
   }
 }
 
+/*
+
 Board.prototype.canTakeKing = function() {
   var moves = this.validMovesIgnoringCheck()
   for (var [_, _, x, y] of moves) {
@@ -480,3 +487,5 @@ exports.EMPTY = EMPTY
 exports.Board = Board
 exports.testCheckmate = testCheckmate
 exports.newBoard = newBoard
+
+*/
