@@ -21,7 +21,8 @@ var App = React.createClass({
     var squares = []
     for (var y = 7; y >= 0; y--) {
       for (var x = 0; x < 8; x++) {
-        squares.push(<Square x={x} y={y} />)
+        var key = x + "," + y
+        squares.push(<Square x={x} y={y} key={key} />)
       }
     }
 
