@@ -17,12 +17,15 @@ var {
 
 var App = React.createClass({
   render: function() {
+    // TODO: read from somewhere
+    var board = new Board()
 
     var squares = []
     for (var y = 7; y >= 0; y--) {
       for (var x = 0; x < 8; x++) {
         var key = x + "," + y
-        squares.push(<Square x={x} y={y} key={key} />)
+        var letter = board.board[x][y]
+        squares.push(<Square x={x} y={y} key={key} letter={letter} />)
       }
     }
 
@@ -45,7 +48,7 @@ var Square = React.createClass({
     return (
         <View style={[styles.square, colorStyle]}>
         <Text>
-        {this.props.x + "," + this.props.y}
+        {this.props.letter}
         </Text>
         </View>
     )
