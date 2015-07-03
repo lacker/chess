@@ -67,6 +67,8 @@ var styles = StyleSheet.create({
   square: {
     width: CELL,
     height: CELL,
+    alignItems: "center",
+    justifyContent: "center",
   },
   darkSquare: {
     backgroundColor: "#333333",
