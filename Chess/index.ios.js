@@ -31,8 +31,10 @@ var App = React.createClass({
     }
 
     return (
-      <View style={styles.board}>
-        {squares}
+      <View style={styles.center}>
+        <View style={styles.board}>
+          {squares}
+        </View>
       </View>
     )
   }
@@ -56,9 +58,14 @@ var Square = React.createClass({
   }
 })
 
-var CELL = 50
+var CELL = 94
 
+// TODO: board should be vertically centered as well
 var styles = StyleSheet.create({
+  center: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
   board: {
     width: CELL * 8,
     height: CELL * 8,
