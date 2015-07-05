@@ -16,15 +16,16 @@ var {
 } = BoardLib;
 
 var App = React.createClass({
-  render: function() {
-    // TODO: read from somewhere
-    var board = new Board()
+  getInitialState() {
+    return new Board()
+  },
 
+  render() {
     var squares = []
     for (var y = 7; y >= 0; y--) {
       for (var x = 0; x < 8; x++) {
         var key = x + "," + y
-        var letter = board.board[x][y]
+        var letter = this.state.board[x][y]
         squares.push(<Square x={x} y={y} key={key} letter={letter} />)
       }
     }
