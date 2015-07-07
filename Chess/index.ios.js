@@ -5,6 +5,7 @@ var {
   AppRegistry,
   StyleSheet,
   Text,
+  TouchableHighlight,
   View,
 } = React;
 var BoardLib = require("./board")
@@ -49,11 +50,13 @@ var Square = React.createClass({
       colorStyle = styles.lightSquare
     }
     return (
-        <View style={[styles.square, colorStyle]}>
+      <TouchableHighlight
+        style={[styles.square, colorStyle]}
+        underlayColor="#67C8FF">
         <Text>
         {this.props.letter}
         </Text>
-        </View>
+      </TouchableHighlight>
     )
   }
 })
