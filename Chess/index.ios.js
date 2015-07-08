@@ -49,6 +49,9 @@ var Square = React.createClass({
     } else {
       colorStyle = styles.lightSquare
     }
+    if (this.props.letter == ".") {
+      return <View style={[styles.square, colorStyle]} />
+    }
     return (
       <TouchableHighlight
         style={[styles.square, colorStyle]}
