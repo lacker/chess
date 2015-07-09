@@ -444,6 +444,19 @@ Board.prototype.isValidMove = function(fromX, fromY, toX, toY) {
   return false
 }
 
+Board.prototype.validMovesFrom = function(fromX, fromY) {
+  var answer = []
+
+  var valids = this.validMoves()
+  for (var valid of valids) {
+    if (fromX == valid[0] && fromY == valid[1]) {
+      answer.push([valid[2], valid[3]])
+    }
+  }
+
+  return answer
+}
+
 // Throws if a move is invalid.
 // Moves are in long ("Smith") algebraic notation.
 Board.prototype.makeSmithMoves = function(moves, name) {
