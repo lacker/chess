@@ -41,6 +41,8 @@ var App = React.createClass({
   }
 })
 
+var CELL = 94
+
 var Square = React.createClass({
   render() {
     var colorStyle
@@ -49,12 +51,16 @@ var Square = React.createClass({
     } else {
       colorStyle = styles.lightSquare
     }
+    var left = this.props.x * CELL
+    var bottom = this.props.y * CELL
+    var styleList = [styles.square, colorStyle,
+                     {left, bottom}]
     if (this.props.letter == ".") {
-      return <View style={[styles.square, colorStyle]} />
+      return <View style={styleList} />
     }
     return (
       <TouchableHighlight
-        style={[styles.square, colorStyle]}
+        style={styleList}
         underlayColor="#67C8FF">
         <Text>
         {this.props.letter}
@@ -63,8 +69,6 @@ var Square = React.createClass({
     )
   }
 })
-
-var CELL = 94
 
 // TODO: board should be vertically centered as well
 var styles = StyleSheet.create({
@@ -75,10 +79,11 @@ var styles = StyleSheet.create({
   board: {
     width: CELL * 8,
     height: CELL * 8,
-    flexWrap: "wrap",
-    flexDirection: "row",
+    // flexWrap: "wrap",
+    // flexDirection: "row",
   },
   square: {
+    position: "absolute",
     width: CELL,
     height: CELL,
     alignItems: "center",
