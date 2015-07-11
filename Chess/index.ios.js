@@ -62,7 +62,7 @@ var Square = React.createClass({
       <TouchableHighlight
         style={styleList}
         underlayColor="#67C8FF">
-        <Text>
+        <Text style={styles.piece}>
         {this.props.letter}
         </Text>
       </TouchableHighlight>
@@ -92,6 +92,9 @@ var styles = StyleSheet.create({
   },
   lightSquare: {
     backgroundColor: "#cccccc",
+  },
+  piece: {
+    fontSize: 47,
   },
 });
 
