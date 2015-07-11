@@ -79,8 +79,6 @@ var styles = StyleSheet.create({
   board: {
     width: CELL * 8,
     height: CELL * 8,
-    // flexWrap: "wrap",
-    // flexDirection: "row",
   },
   square: {
     position: "absolute",
