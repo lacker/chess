@@ -18,7 +18,15 @@ var {
 
 var App = React.createClass({
   getInitialState() {
-    return new Board()
+    var board = new Board()
+    var selected = null
+    return {board, selected}
+  },
+
+  isSelected(x, y) {
+    return (this.state.selected &&
+            this.state.selected[0] == x &&
+            this.state.selected[1] == y)
   },
 
   render() {
@@ -26,7 +34,7 @@ var App = React.createClass({
     for (var y = 7; y >= 0; y--) {
       for (var x = 0; x < 8; x++) {
         var key = x + "," + y
-        var letter = this.state.board[x][y]
+        var letter = this.state.board.board[x][y]
         squares.push(<Square x={x} y={y} key={key} letter={letter} />)
       }
     }
@@ -38,7 +46,7 @@ var App = React.createClass({
         </View>
       </View>
     )
-  }
+  },
 })
 
 var CELL = 94
