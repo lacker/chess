@@ -23,6 +23,23 @@ var App = React.createClass({
   },
 
   select(x, y) {
+    // Check if we just made a move
+    if (this.state.selected) {
+      var fromX = this.state.selected[0]
+      var fromY = this.state.selected[1]
+      if (this.state.board.isValidMove(fromX, fromY, x, y)) {
+        console.log("makeMove(" + fromX + "," + fromY + "," + x + "," + y + ")")
+        this.state.board.makeMove(fromX, fromY, x, y)
+        this.setState({selected: null})
+        return
+      }
+    }
+
+    // Check if we're selecting a piece that can move
+    var destinations = this.state.board.validMovesFrom(x, y)
+    if (destinations.length == 0) {
+      return
+    }
     console.log("select(" + x + "," + y + ")")
     this.setState({selected: [x, y]})
   },
