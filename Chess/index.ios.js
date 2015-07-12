@@ -22,6 +22,11 @@ var App = React.createClass({
     return {board, selected}
   },
 
+  select(x, y) {
+    console.log("select(" + x + "," + y + ")")
+    this.setState({selected: [x, y]})
+  },
+
   isSelected(x, y) {
     return (this.state.selected &&
             this.state.selected[0] == x &&
@@ -34,7 +39,9 @@ var App = React.createClass({
       for (var x = 0; x < 8; x++) {
         var key = x + "," + y
         var letter = this.state.board.board[x][y]
-        squares.push(<Square x={x} y={y} key={key} letter={letter} />)
+        squares.push(<Square x={x} y={y} key={key} letter={letter}
+                      selected={this.isSelected(x, y)}
+                      onSelect={(x, y) => this.select(x, y)} />)
       }
     }
 
@@ -52,13 +59,13 @@ var CELL = 94
 
 var Square = React.createClass({
   getInitialState() {
-    return {dragging: false}
+    return {}
   },
 
   render() {
     var colorStyle
-    if (this.state.dragging) {
-      colorStyle = styles.draggingSquare
+    if (this.props.selected) {
+      colorStyle = styles.selectedSquare
     } else if ((this.props.x + this.props.y) % 2 == 0) {
       colorStyle = styles.darkSquare
     } else {
@@ -68,9 +75,7 @@ var Square = React.createClass({
     var bottom = this.props.y * CELL
     var styleList = [styles.square, colorStyle,
                      {left, bottom}]
-    if (this.props.letter == ".") {
-      return <View style={styleList} />
-    }
+    var letter = (this.props.letter == ".") ? "" : this.props.letter
     return (
       <View
         style={styleList}
@@ -79,16 +84,15 @@ var Square = React.createClass({
         onResponderRelease={this._onResponderRelease}
         >
         <Text style={styles.piece}>
-        {this.props.letter}
+        {letter}
         </Text>
       </View>
     )
   },
 
   _onStartShouldSetResponder: function(e) {
-    this.setState({
-      dragging: true,
-    })
+    console.log("onStartShouldSetResponder")
+    this.props.onSelect(this.props.x, this.props.y)
     return true
   },
 
@@ -97,9 +101,7 @@ var Square = React.createClass({
   },
 
   _onResponderRelease: function(e) {
-    this.setState({
-      dragging: false,
-    })
+    console.log("onResponderRelease")
   },
 })
 
@@ -126,7 +128,7 @@ var styles = StyleSheet.create({
   lightSquare: {
     backgroundColor: "#cccccc",
   },
-  draggingSquare: {
+  selectedSquare: {
     backgroundColor: "#ff0000",
   },
   piece: {
