@@ -75,7 +75,16 @@ var Square = React.createClass({
     var bottom = this.props.y * CELL
     var styleList = [styles.square, colorStyle,
                      {left, bottom}]
+
     var letter = (this.props.letter == ".") ? "" : this.props.letter
+    var pieceStyle
+    if (letter.toUpperCase() != letter) {
+      letter = letter.toUpperCase()
+      pieceStyle = styles.darkPiece
+    } else {
+      pieceStyle = styles.lightPiece
+    }
+    
     return (
       <View
         style={styleList}
@@ -83,7 +92,7 @@ var Square = React.createClass({
         onResponderMove={this._onResponderMove}
         onResponderRelease={this._onResponderRelease}
         >
-        <Text style={styles.piece}>
+        <Text style={pieceStyle}>
         {letter}
         </Text>
       </View>
@@ -112,6 +121,7 @@ var styles = StyleSheet.create({
     justifyContent: "center",
   },
   board: {
+    top: 120,
     width: CELL * 8,
     height: CELL * 8,
   },
@@ -123,16 +133,23 @@ var styles = StyleSheet.create({
     justifyContent: "center",
   },
   darkSquare: {
-    backgroundColor: "#333333",
+    backgroundColor: "#876543",
   },
   lightSquare: {
-    backgroundColor: "#cccccc",
+    backgroundColor: "#fecb87",
   },
   selectedSquare: {
     backgroundColor: "#ff0000",
   },
-  piece: {
+  darkPiece: {
+    color: "#000000",
     fontSize: 47,
+    fontWeight: "bold",
+  },
+  lightPiece: {
+    color: "#ffffff",
+    fontSize: 47,
+    fontWeight: "bold",
   },
 });
 
