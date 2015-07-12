@@ -114,7 +114,6 @@ var Square = React.createClass({
   },
 })
 
-// TODO: board should be vertically centered as well
 var styles = StyleSheet.create({
   center: {
     alignItems: "center",
