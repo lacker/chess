@@ -5,7 +5,6 @@ var {
   AppRegistry,
   StyleSheet,
   Text,
-  TouchableHighlight,
   View,
 } = React;
 var BoardLib = require("./board")
@@ -52,9 +51,15 @@ var App = React.createClass({
 var CELL = 94
 
 var Square = React.createClass({
+  getInitialState() {
+    return {dragging: false}
+  },
+
   render() {
     var colorStyle
-    if ((this.props.x + this.props.y) % 2 == 0) {
+    if (this.state.dragging) {
+      colorStyle = styles.draggingSquare
+    } else if ((this.props.x + this.props.y) % 2 == 0) {
       colorStyle = styles.darkSquare
     } else {
       colorStyle = styles.lightSquare
@@ -67,15 +72,35 @@ var Square = React.createClass({
       return <View style={styleList} />
     }
     return (
-      <TouchableHighlight
+      <View
         style={styleList}
-        underlayColor="#67C8FF">
+        onStartShouldSetResponder={this._onStartShouldSetResponder}
+        onResponderMove={this._onResponderMove}
+        onResponderRelease={this._onResponderRelease}
+        >
         <Text style={styles.piece}>
         {this.props.letter}
         </Text>
-      </TouchableHighlight>
+      </View>
     )
-  }
+  },
+
+  _onStartShouldSetResponder: function(e) {
+    this.setState({
+      dragging: true,
+    })
+    return true
+  },
+
+  _onResponderMove: function(e) {
+    console.log("onResponderMover")
+  },
+
+  _onResponderRelease: function(e) {
+    this.setState({
+      dragging: false,
+    })
+  },
 })
 
 // TODO: board should be vertically centered as well
@@ -100,6 +125,9 @@ var styles = StyleSheet.create({
   },
   lightSquare: {
     backgroundColor: "#cccccc",
+  },
+  draggingSquare: {
+    backgroundColor: "#ff0000",
   },
   piece: {
     fontSize: 47,
