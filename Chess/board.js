@@ -329,12 +329,14 @@ Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
 
   // Kingside castling
   if (this.isKingsideCastle(fromX, fromY, toX, toY)) {
+    // Move rook
     this.board[5][fromY] = this.board[7][fromY]
     this.board[7][fromY] = "."
   }
 
   // Queenside castling
   if (this.isQueensideCastle(fromX, fromY, toX, toY)) {
+    // Move rook
     this.board[3][fromY] = this.board[0][fromY]
     this.board[0][fromY] = "."
   }
@@ -464,6 +466,7 @@ Board.prototype.makeSmithMoves = function(moves, name) {
     var [fromX, fromY, toX, toY] = moveForSmith(move)
 
     if (!this.isValidMove(fromX, fromY, toX, toY)) {
+      this.log()
       throw "in game " + name + ", invalid move: " + move
     }
 
