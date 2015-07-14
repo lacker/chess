@@ -301,7 +301,7 @@ Board.prototype.isQueensideCastle = function(fromX, fromY, toX, toY) {
   return (piece.toUpperCase() === "K" && fromX === 4 && toX === 2)
 }
 
-Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
+Board.prototype.makeMove = function(fromX, fromY, toX, toY, verbose) {
   var piece = this.board[fromX][fromY]
   var isPawn = piece.toUpperCase() === "P"
 
@@ -311,6 +311,19 @@ Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
     this.board[toX][fromY] = "."
   }
 
+  // Moving the rook for kingside castling
+  if (this.isKingsideCastle(fromX, fromY, toX, toY)) {
+    this.board[5][fromY] = this.board[7][fromY]
+    this.board[7][fromY] = "."
+  }
+
+  // Moving the rook for queenside castling
+  if (this.isQueensideCastle(fromX, fromY, toX, toY)) {
+    this.board[3][fromY] = this.board[0][fromY]
+    this.board[0][fromY] = "."
+  }
+
+  // Move the main piece being moved
   var queenY = (this.turn === WHITE ? 7 : 0)
   if (isPawn && toY === queenY) {
     this.board[toX][toY] = (this.turn === WHITE ? "Q" : "q")
@@ -325,20 +338,6 @@ Board.prototype.makeMove = function(fromX, fromY, toX, toY) {
     this.passant = [fromX, (fromY + toY) / 2]
   } else {
     this.passant = null
-  }
-
-  // Kingside castling
-  if (this.isKingsideCastle(fromX, fromY, toX, toY)) {
-    // Move rook
-    this.board[5][fromY] = this.board[7][fromY]
-    this.board[7][fromY] = "."
-  }
-
-  // Queenside castling
-  if (this.isQueensideCastle(fromX, fromY, toX, toY)) {
-    // Move rook
-    this.board[3][fromY] = this.board[0][fromY]
-    this.board[0][fromY] = "."
   }
 
   // Update whether future castling is prevented
@@ -470,7 +469,7 @@ Board.prototype.makeSmithMoves = function(moves, name) {
       throw "in game " + name + ", invalid move: " + move
     }
 
-    this.makeMove(fromX, fromY, toX, toY)
+    this.makeMove(fromX, fromY, toX, toY, true)
   }
 }
 
