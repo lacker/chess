@@ -65,3 +65,11 @@ board.newBoard("kingside castling moves rook", [
   "g1f3", "g8f6",
   "e1g1", "e8g8",
   "f1e1", "f8e8"])
+
+board.newBoard("queenside castling moves rook", [
+  "d2d4", "d7d5",
+  "d1d3", "d8d6",
+  "c1e3", "c8e6",
+  "b1c3", "b8c6",
+  "e1c1", "e8c8",
+  "d1e1", "d8e8"])
