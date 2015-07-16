@@ -23,11 +23,18 @@ var App = React.createClass({
   },
 
   select(x, y) {
-    // Check if we just made a move
     if (this.state.selected) {
       var fromX = this.state.selected[0]
       var fromY = this.state.selected[1]
+
+      if (fromX == x && fromY == y) {
+        // We are canceling a move by re-selecting the selection
+        this.setState({selected: null})
+        return
+      }
+
       if (this.state.board.isValidMove(fromX, fromY, x, y)) {
+        // We are making a move
         console.log("makeMove(" + fromX + "," + fromY + "," + x + "," + y + ")")
         this.state.board.makeMove(fromX, fromY, x, y)
         this.setState({selected: null})
