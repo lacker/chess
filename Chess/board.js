@@ -65,81 +65,78 @@ var ROOK_STEPS = [[1, 0],
                   [0, -1]]
 var QUEEN_STEPS = BISHOP_STEPS.concat(ROOK_STEPS)
 
-
-// Can also reinflate a board that was stringified.
-function Board(data) {
-  if (typeof data === "string") {
-    data = JSON.parse(data)
-  }
-
-  // Each square's content has a character representation.
-  // Standard chess notation for pieces, caps is white, . is empty.
-  // [0][0] is a1, [7][0] is h1, [7][7] is h8.
-  // Typically we refer to these two indices as x and y.
-  this.board = (data && data.board) ||
-    [["R","P",".",".",".",".","p","r"],
-     ["N","P",".",".",".",".","p","n"],
-     ["B","P",".",".",".",".","p","b"],
-     ["Q","P",".",".",".",".","p","q"],
-     ["K","P",".",".",".",".","p","k"],
-     ["B","P",".",".",".",".","p","b"],
-     ["N","P",".",".",".",".","p","n"],
-     ["R","P",".",".",".",".","p","r"]]
-
-  // Whose turn it is to move
-  this.turn = (data && data.turn) || WHITE
-
-  // The square that an en-passant capture can move into.
-  // null if there is none
-  this.passant = (data && data.passant) || null
-
-  // Whether a player can still castle in a direction.
-  this.kingsideOK = {}
-  this.queensideOK = {}
-  for (var color of [BLACK, WHITE]) {
-    this.kingsideOK[color] = true
-    this.queensideOK[color] = true
-  }
-}
-
-
-
-
-// Converts to JSON. The constructor accepts this
-Board.prototype.stringify = function() {
-  return JSON.stringify({
-    board: this.board,
-    passant: this.passant,
-    turn: this.turn,
-    kingsideOK: this.kingsideOK,
-    queensideOK: this.queensideOK
-  })
-}
-
-Board.prototype.log = function() {
-  for (var y = 7; y >= 0; y--) {
-    var line = ""
-    for (var x = 0; x < 8; x++) {
-      line += this.board[x][y]
+class Board {
+  // Can also reinflate a board that was stringified.
+  constructor(data) {
+    if (typeof data === "string") {
+      data = JSON.parse(data)
     }
-    console.log(line)
+
+    // Each square's content has a character representation.
+    // Standard chess notation for pieces, caps is white, . is empty.
+    // [0][0] is a1, [7][0] is h1, [7][7] is h8.
+    // Typically we refer to these two indices as x and y.
+    this.board = (data && data.board) ||
+      [["R","P",".",".",".",".","p","r"],
+       ["N","P",".",".",".",".","p","n"],
+       ["B","P",".",".",".",".","p","b"],
+       ["Q","P",".",".",".",".","p","q"],
+       ["K","P",".",".",".",".","p","k"],
+       ["B","P",".",".",".",".","p","b"],
+       ["N","P",".",".",".",".","p","n"],
+       ["R","P",".",".",".",".","p","r"]]
+
+    // Whose turn it is to move
+    this.turn = (data && data.turn) || WHITE
+
+    // The square that an en-passant capture can move into.
+    // null if there is none
+    this.passant = (data && data.passant) || null
+
+    // Whether a player can still castle in a direction.
+    this.kingsideOK = {}
+    this.queensideOK = {}
+    for (var color of [BLACK, WHITE]) {
+      this.kingsideOK[color] = true
+      this.queensideOK[color] = true
+    }
   }
-}
 
-Board.prototype.colorForCoords = function(x, y) {
-  return colorForPiece(this.board[x][y])
-}
+  // Converts to JSON. The constructor accepts this
+  stringify() {
+    return JSON.stringify({
+      board: this.board,
+      passant: this.passant,
+      turn: this.turn,
+      kingsideOK: this.kingsideOK,
+      queensideOK: this.queensideOK
+    })
+  }
 
-// square is in "e4" type notation
-Board.prototype.pieceForSquare = function(square) {
-  var [x, y] = coordsForSquare(square)
-  return this.board[x][y]
-}
+  log() {
+    for (var y = 7; y >= 0; y--) {
+      var line = ""
+      for (var x = 0; x < 8; x++) {
+        line += this.board[x][y]
+      }
+      console.log(line)
+    }
+  }
+
+  colorForCoords(x, y) {
+    return colorForPiece(this.board[x][y])
+  }
+
+  // square is in "e4" type notation
+  pieceForSquare(square) {
+    var [x, y] = coordsForSquare(square)
+    return this.board[x][y]
+  }
 
 // A list of moves that a piece can make, if its valid
 // moves are given by the provided list of [dx, dy] hop deltas.
 // (Useful for kings and knights.)
-Board.prototype.hopMoves = function(deltas, x, y) {
+hopMoves(deltas, x, y) {
   var answer = []
   for (var dxdy of deltas) {
     var [dx, dy] = dxdy
@@ -155,7 +152,7 @@ Board.prototype.hopMoves = function(deltas, x, y) {
 }
 
 // A list of [x, y] coords that a knight can move to.
-Board.prototype.knightMoves = function(x, y) {
+knightMoves(x, y) {
   var deltas = [[1, 2],
                 [2, 1],
                 [-1, 2],
@@ -169,14 +166,14 @@ Board.prototype.knightMoves = function(x, y) {
 
 // A list of moves that a king on (x, y) can make.
 // Does not count castling.
-Board.prototype.kingMoves = function(x, y) {
+kingMoves(x, y) {
   return this.hopMoves(QUEEN_STEPS, x, y)
 }
 
 // A list of moves that a piece can make, if its valid
 // moves are given by the provided list of deltas, plus it can repeat
 // them as much as it wants.
-Board.prototype.slideMoves = function(deltas, x, y) {
+slideMoves(deltas, x, y) {
   var answer = []
   for (var dxdy of deltas) {
     var [dx, dy] = dxdy
@@ -201,17 +198,17 @@ Board.prototype.slideMoves = function(deltas, x, y) {
   return answer
 }
 
-Board.prototype.bishopMoves = function(x, y) {
+bishopMoves(x, y) {
   return this.slideMoves(BISHOP_STEPS, x, y)
 }
-Board.prototype.rookMoves = function(x, y) {
+rookMoves(x, y) {
   return this.slideMoves(ROOK_STEPS, x, y)
 }
-Board.prototype.queenMoves = function(x, y) {
+queenMoves(x, y) {
   return this.slideMoves(QUEEN_STEPS, x, y)
 }
 
-Board.prototype.pawnMoves = function(x, y) {
+pawnMoves(x, y) {
   var answer = []
   if (validCoords(x, y + this.turn) &&
       this.colorForCoords(x, y + this.turn) === EMPTY) {
@@ -250,7 +247,7 @@ Board.prototype.pawnMoves = function(x, y) {
 // situation in which they are in check.
 // This does not include castling.
 // Returns a list of moves in [fromx, fromy, tox, toy] format.
-Board.prototype.validMovesIgnoringCheck = function() {
+validMovesIgnoringCheck() {
   var answer = []
   for (var x = 0; x < 8; x++) {
     for (var y = 0; y < 8; y++) {
@@ -287,21 +284,21 @@ Board.prototype.validMovesIgnoringCheck = function() {
   return answer
 }
 
-Board.prototype.copy = function() {
+copy() {
   return new Board(this.stringify())
 }
 
-Board.prototype.isKingsideCastle = function(fromX, fromY, toX, toY) {
+isKingsideCastle(fromX, fromY, toX, toY) {
   var piece = this.board[fromX][fromY]
   return (piece.toUpperCase() === "K" && fromX === 4 && toX === 6)
 }
 
-Board.prototype.isQueensideCastle = function(fromX, fromY, toX, toY) {
+isQueensideCastle(fromX, fromY, toX, toY) {
   var piece = this.board[fromX][fromY]
   return (piece.toUpperCase() === "K" && fromX === 4 && toX === 2)
 }
 
-Board.prototype.makeMove = function(fromX, fromY, toX, toY, verbose) {
+makeMove(fromX, fromY, toX, toY, verbose) {
   var piece = this.board[fromX][fromY]
   var isPawn = piece.toUpperCase() === "P"
 
@@ -363,7 +360,7 @@ Board.prototype.makeMove = function(fromX, fromY, toX, toY, verbose) {
   }
 }
 
-Board.prototype.canTakeKing = function() {
+canTakeKing() {
   var moves = this.validMovesIgnoringCheck()
   for (var xy of moves) {
     var [_, _, x, y] = xy
@@ -374,21 +371,21 @@ Board.prototype.canTakeKing = function() {
   return false
 }
 
-Board.prototype.isCheck = function() {
+isCheck() {
   var copy = this.copy()
   copy.turn = -copy.turn
   return copy.canTakeKing()
 }
 
-Board.prototype.isCheckmate = function() {
+isCheckmate() {
   return this.validMoves().length === 0 && this.isCheck()
 }
 
-Board.prototype.isStalemate = function() {
+isStalemate() {
   return this.validMoves().length === 0 && !this.isCheck()
 }
 
-Board.prototype.movesIntoCheck = function(fromX, fromY, toX, toY) {
+movesIntoCheck(fromX, fromY, toX, toY) {
   var copy = this.copy()
   copy.makeMove(fromX, fromY, toX, toY)
   return copy.canTakeKing()
@@ -398,7 +395,7 @@ Board.prototype.movesIntoCheck = function(fromX, fromY, toX, toY) {
 // This does include castling.
 // This does not allow castling through check.
 // This does not allow castling with a piece that has already moved.
-Board.prototype.validMoves = function() {
+validMoves() {
   var answer = []
   var possible = this.validMovesIgnoringCheck()
   for (var coords of possible) {
@@ -435,7 +432,7 @@ Board.prototype.validMoves = function() {
   return answer
 }
 
-Board.prototype.isValidMove = function(fromX, fromY, toX, toY) {
+isValidMove(fromX, fromY, toX, toY) {
   var valids = this.validMoves()
   for (var valid of valids) {
     if (jequal(valid, [fromX, fromY, toX, toY])) {
@@ -445,7 +442,7 @@ Board.prototype.isValidMove = function(fromX, fromY, toX, toY) {
   return false
 }
 
-Board.prototype.validMovesFrom = function(fromX, fromY) {
+validMovesFrom(fromX, fromY) {
   var answer = []
 
   var valids = this.validMoves()
@@ -460,7 +457,7 @@ Board.prototype.validMovesFrom = function(fromX, fromY) {
 
 // Throws if a move is invalid.
 // Moves are in long ("Smith") algebraic notation.
-Board.prototype.makeSmithMoves = function(moves, name) {
+makeSmithMoves(moves, name) {
   for (var move of moves) {
     var [fromX, fromY, toX, toY] = moveForSmith(move)
 
@@ -471,6 +468,8 @@ Board.prototype.makeSmithMoves = function(moves, name) {
 
     this.makeMove(fromX, fromY, toX, toY, true)
   }
+}
+
 }
 
 // Throws unless the provided list of moves, in long algebraic
