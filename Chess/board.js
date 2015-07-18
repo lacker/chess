@@ -133,342 +133,342 @@ class Board {
     return this.board[x][y]
   }
 
-// A list of moves that a piece can make, if its valid
-// moves are given by the provided list of [dx, dy] hop deltas.
-// (Useful for kings and knights.)
-hopMoves(deltas, x, y) {
-  var answer = []
-  for (var dxdy of deltas) {
-    var [dx, dy] = dxdy
-    var newx = x + dx
-    var newy = y + dy
-    if (validCoords(newx, newy) &&
-        this.colorForCoords(newx, newy) != this.turn) {
-      answer.push([x, y, newx, newy])
-    }
-  }
-
-  return answer
-}
-
-// A list of [x, y] coords that a knight can move to.
-knightMoves(x, y) {
-  var deltas = [[1, 2],
-                [2, 1],
-                [-1, 2],
-                [2, -1],
-                [1, -2],
-                [-2, 1],
-                [-1, -2],
-                [-2, -1]]
-  return this.hopMoves(deltas, x, y)
-}
-
-// A list of moves that a king on (x, y) can make.
-// Does not count castling.
-kingMoves(x, y) {
-  return this.hopMoves(QUEEN_STEPS, x, y)
-}
-
-// A list of moves that a piece can make, if its valid
-// moves are given by the provided list of deltas, plus it can repeat
-// them as much as it wants.
-slideMoves(deltas, x, y) {
-  var answer = []
-  for (var dxdy of deltas) {
-    var [dx, dy] = dxdy
-    var newx = x
-    var newy = y
-    while (true) {
-      newx += dx
-      newy += dy
-      if (!validCoords(newx, newy)) {
-        break
-      }
-      var colorAt = this.colorForCoords(newx, newy)
-      if (colorAt === this.turn) {
-        break
-      }
-      answer.push([x, y, newx, newy])
-      if (colorAt === -this.turn) {
-        break
+  // A list of moves that a piece can make, if its valid
+  // moves are given by the provided list of [dx, dy] hop deltas.
+  // (Useful for kings and knights.)
+  hopMoves(deltas, x, y) {
+    var answer = []
+    for (var dxdy of deltas) {
+      var [dx, dy] = dxdy
+      var newx = x + dx
+      var newy = y + dy
+      if (validCoords(newx, newy) &&
+          this.colorForCoords(newx, newy) != this.turn) {
+        answer.push([x, y, newx, newy])
       }
     }
+
+    return answer
   }
-  return answer
-}
 
-bishopMoves(x, y) {
-  return this.slideMoves(BISHOP_STEPS, x, y)
-}
-rookMoves(x, y) {
-  return this.slideMoves(ROOK_STEPS, x, y)
-}
-queenMoves(x, y) {
-  return this.slideMoves(QUEEN_STEPS, x, y)
-}
+  // A list of [x, y] coords that a knight can move to.
+  knightMoves(x, y) {
+    var deltas = [[1, 2],
+                  [2, 1],
+                  [-1, 2],
+                  [2, -1],
+                  [1, -2],
+                  [-2, 1],
+                  [-1, -2],
+                  [-2, -1]]
+    return this.hopMoves(deltas, x, y)
+  }
 
-pawnMoves(x, y) {
-  var answer = []
-  if (validCoords(x, y + this.turn) &&
-      this.colorForCoords(x, y + this.turn) === EMPTY) {
-    // We can push this pawn one square
-    answer.push([x, y, x, y + this.turn])
+  // A list of moves that a king on (x, y) can make.
+  // Does not count castling.
+  kingMoves(x, y) {
+    return this.hopMoves(QUEEN_STEPS, x, y)
+  }
 
-    if ((y === 1 && this.turn === WHITE) ||
-        (y === 6 && this.turn === BLACK)) {
-      // This pawn is in the right location to do a double-push
-      if (this.colorForCoords(x, y + 2 * this.turn) === EMPTY) {
-        // We can push this pawn two squares
-        answer.push([x, y, x, y + 2 * this.turn])
+  // A list of moves that a piece can make, if its valid
+  // moves are given by the provided list of deltas, plus it can repeat
+  // them as much as it wants.
+  slideMoves(deltas, x, y) {
+    var answer = []
+    for (var dxdy of deltas) {
+      var [dx, dy] = dxdy
+      var newx = x
+      var newy = y
+      while (true) {
+        newx += dx
+        newy += dy
+        if (!validCoords(newx, newy)) {
+          break
+        }
+        var colorAt = this.colorForCoords(newx, newy)
+        if (colorAt === this.turn) {
+          break
+        }
+        answer.push([x, y, newx, newy])
+        if (colorAt === -this.turn) {
+          break
+        }
       }
     }
+    return answer
   }
 
-  // Captures
-  var newxs = [x - 1, x + 1]
-  for (var newx of newxs) {
-    if (validCoords(newx, y + this.turn) &&
-        (this.colorForCoords(newx, y + this.turn) === -this.turn)) {
-      // We can capture normally
-      answer.push([x, y, newx, y + this.turn])
-    } else if (this.passant != null &&
-               this.passant[0] === newx &&
-               this.passant[1] === y + this.turn) {
-      // We can capture en passant
-      answer.push([x, y, newx, y + this.turn])
-    }
+  bishopMoves(x, y) {
+    return this.slideMoves(BISHOP_STEPS, x, y)
+  }
+  rookMoves(x, y) {
+    return this.slideMoves(ROOK_STEPS, x, y)
+  }
+  queenMoves(x, y) {
+    return this.slideMoves(QUEEN_STEPS, x, y)
   }
 
-  return answer
-}
+  pawnMoves(x, y) {
+    var answer = []
+    if (validCoords(x, y + this.turn) &&
+        this.colorForCoords(x, y + this.turn) === EMPTY) {
+      // We can push this pawn one square
+      answer.push([x, y, x, y + this.turn])
 
-// This finds all the valid moves if you allow the mover to create a
-// situation in which they are in check.
-// This does not include castling.
-// Returns a list of moves in [fromx, fromy, tox, toy] format.
-validMovesIgnoringCheck() {
-  var answer = []
-  for (var x = 0; x < 8; x++) {
-    for (var y = 0; y < 8; y++) {
-      if (this.colorForCoords(x, y) != this.turn) {
-        continue
-      }
-
-      var piece = this.board[x][y].toUpperCase()
-      switch(piece) {
-      case "R":
-        answer = answer.concat(this.rookMoves(x, y))
-        break
-      case "N":
-        answer = answer.concat(this.knightMoves(x, y))
-        break
-      case "B":
-        answer = answer.concat(this.bishopMoves(x, y))
-        break
-      case "Q":
-        answer = answer.concat(this.queenMoves(x, y))
-        break
-      case "K":
-        answer = answer.concat(this.kingMoves(x, y))
-        break
-      case "P":
-        answer = answer.concat(this.pawnMoves(x, y))
-        break
-      default:
-        throw ("unrecognized piece: " + piece)
+      if ((y === 1 && this.turn === WHITE) ||
+          (y === 6 && this.turn === BLACK)) {
+        // This pawn is in the right location to do a double-push
+        if (this.colorForCoords(x, y + 2 * this.turn) === EMPTY) {
+          // We can push this pawn two squares
+          answer.push([x, y, x, y + 2 * this.turn])
+        }
       }
     }
-  }
 
-  return answer
-}
-
-copy() {
-  return new Board(this.stringify())
-}
-
-isKingsideCastle(fromX, fromY, toX, toY) {
-  var piece = this.board[fromX][fromY]
-  return (piece.toUpperCase() === "K" && fromX === 4 && toX === 6)
-}
-
-isQueensideCastle(fromX, fromY, toX, toY) {
-  var piece = this.board[fromX][fromY]
-  return (piece.toUpperCase() === "K" && fromX === 4 && toX === 2)
-}
-
-makeMove(fromX, fromY, toX, toY, verbose) {
-  var piece = this.board[fromX][fromY]
-  var isPawn = piece.toUpperCase() === "P"
-
-  // Remove pawns that were captured en passant
-  if (isPawn && fromX != toX && this.board[toX][toY] === ".") {
-    // It's an en passant capture
-    this.board[toX][fromY] = "."
-  }
-
-  // Moving the rook for kingside castling
-  if (this.isKingsideCastle(fromX, fromY, toX, toY)) {
-    this.board[5][fromY] = this.board[7][fromY]
-    this.board[7][fromY] = "."
-  }
-
-  // Moving the rook for queenside castling
-  if (this.isQueensideCastle(fromX, fromY, toX, toY)) {
-    this.board[3][fromY] = this.board[0][fromY]
-    this.board[0][fromY] = "."
-  }
-
-  // Move the main piece being moved
-  var queenY = (this.turn === WHITE ? 7 : 0)
-  if (isPawn && toY === queenY) {
-    this.board[toX][toY] = (this.turn === WHITE ? "Q" : "q")
-  } else {
-    this.board[toX][toY] = piece
-  }
-  this.board[fromX][fromY] = "."
-  this.turn = -this.turn
-
-  // Track the en passant square
-  if (piece.toUpperCase() === "P" && Math.abs(fromY - toY) === 2) {
-    this.passant = [fromX, (fromY + toY) / 2]
-  } else {
-    this.passant = null
-  }
-
-  // Update whether future castling is prevented
-  if (this.board[4][0] != "K") {
-    this.kingsideOK[WHITE] = false
-    this.queensideOK[WHITE] = false
-  }
-  if (this.board[0][0] != "R") {
-    this.queensideOK[WHITE] = false
-  }
-  if (this.board[7][0] != "R") {
-    this.kingsideOK[WHITE] = false
-  }
-  if (this.board[4][7] != "k") {
-    this.kingsideOK[WHITE] = false
-    this.queensideOK[WHITE] = false
-  }
-  if (this.board[0][7] != "r") {
-    this.queensideOK[WHITE] = false
-  }
-  if (this.board[7][7] != "r") {
-    this.kingsideOK[WHITE] = false
-  }
-}
-
-canTakeKing() {
-  var moves = this.validMovesIgnoringCheck()
-  for (var xy of moves) {
-    var [_, _, x, y] = xy
-    if (this.board[x][y].toUpperCase() === "K") {
-      return true
+    // Captures
+    var newxs = [x - 1, x + 1]
+    for (var newx of newxs) {
+      if (validCoords(newx, y + this.turn) &&
+          (this.colorForCoords(newx, y + this.turn) === -this.turn)) {
+        // We can capture normally
+        answer.push([x, y, newx, y + this.turn])
+      } else if (this.passant != null &&
+                 this.passant[0] === newx &&
+                 this.passant[1] === y + this.turn) {
+        // We can capture en passant
+        answer.push([x, y, newx, y + this.turn])
+      }
     }
-  }
-  return false
-}
 
-isCheck() {
-  var copy = this.copy()
-  copy.turn = -copy.turn
-  return copy.canTakeKing()
-}
-
-isCheckmate() {
-  return this.validMoves().length === 0 && this.isCheck()
-}
-
-isStalemate() {
-  return this.validMoves().length === 0 && !this.isCheck()
-}
-
-movesIntoCheck(fromX, fromY, toX, toY) {
-  var copy = this.copy()
-  copy.makeMove(fromX, fromY, toX, toY)
-  return copy.canTakeKing()
-}
-
-// This does not allow moving into check.
-// This does include castling.
-// This does not allow castling through check.
-// This does not allow castling with a piece that has already moved.
-validMoves() {
-  var answer = []
-  var possible = this.validMovesIgnoringCheck()
-  for (var coords of possible) {
-    var [fromX, fromY, toX, toY] = coords
-    if (!this.movesIntoCheck(fromX, fromY, toX, toY)) {
-      answer.push([fromX, fromY, toX, toY])
-    }
+    return answer
   }
 
-  // Add castling.
-  var castley = (this.turn === WHITE ? 0 : 7)
-  var king = (this.turn === WHITE ? "K" : "k")
-  var rook = (this.turn === WHITE ? "R" : "r")
-  if (!this.isCheck() && this.board[4][castley] === king) {
-    if (this.colorForCoords(5, castley) === EMPTY &&
-        this.colorForCoords(6, castley) === EMPTY &&
-        this.board[7][castley] === rook &&
-        !this.movesIntoCheck(4, castley, 5, castley) &&
-        !this.movesIntoCheck(4, castley, 6, castley) &&
-        this.kingsideOK[this.turn]) {
-      answer.push([4, castley, 6, castley])
+  // This finds all the valid moves if you allow the mover to create a
+  // situation in which they are in check.
+  // This does not include castling.
+  // Returns a list of moves in [fromx, fromy, tox, toy] format.
+  validMovesIgnoringCheck() {
+    var answer = []
+    for (var x = 0; x < 8; x++) {
+      for (var y = 0; y < 8; y++) {
+        if (this.colorForCoords(x, y) != this.turn) {
+          continue
+        }
+
+        var piece = this.board[x][y].toUpperCase()
+        switch(piece) {
+        case "R":
+          answer = answer.concat(this.rookMoves(x, y))
+          break
+        case "N":
+          answer = answer.concat(this.knightMoves(x, y))
+          break
+        case "B":
+          answer = answer.concat(this.bishopMoves(x, y))
+          break
+        case "Q":
+          answer = answer.concat(this.queenMoves(x, y))
+          break
+        case "K":
+          answer = answer.concat(this.kingMoves(x, y))
+          break
+        case "P":
+          answer = answer.concat(this.pawnMoves(x, y))
+          break
+        default:
+          throw ("unrecognized piece: " + piece)
+        }
+      }
     }
-    if (this.colorForCoords(3, castley) === EMPTY &&
-        this.colorForCoords(2, castley) === EMPTY &&
-        this.colorForCoords(1, castley) === EMPTY &&
-        this.board[0][castley] === rook &&
-        !this.movesIntoCheck(4, castley, 3, castley) &&
-        !this.movesIntoCheck(4, castley, 2, castley) &&
-        this.queensideOK[this.turn]) {
-      answer.push([4, castley, 2, castley])
+
+    return answer
+  }
+
+  copy() {
+    return new Board(this.stringify())
+  }
+
+  isKingsideCastle(fromX, fromY, toX, toY) {
+    var piece = this.board[fromX][fromY]
+    return (piece.toUpperCase() === "K" && fromX === 4 && toX === 6)
+  }
+
+  isQueensideCastle(fromX, fromY, toX, toY) {
+    var piece = this.board[fromX][fromY]
+    return (piece.toUpperCase() === "K" && fromX === 4 && toX === 2)
+  }
+
+  makeMove(fromX, fromY, toX, toY, verbose) {
+    var piece = this.board[fromX][fromY]
+    var isPawn = piece.toUpperCase() === "P"
+
+    // Remove pawns that were captured en passant
+    if (isPawn && fromX != toX && this.board[toX][toY] === ".") {
+      // It's an en passant capture
+      this.board[toX][fromY] = "."
+    }
+
+    // Moving the rook for kingside castling
+    if (this.isKingsideCastle(fromX, fromY, toX, toY)) {
+      this.board[5][fromY] = this.board[7][fromY]
+      this.board[7][fromY] = "."
+    }
+
+    // Moving the rook for queenside castling
+    if (this.isQueensideCastle(fromX, fromY, toX, toY)) {
+      this.board[3][fromY] = this.board[0][fromY]
+      this.board[0][fromY] = "."
+    }
+
+    // Move the main piece being moved
+    var queenY = (this.turn === WHITE ? 7 : 0)
+    if (isPawn && toY === queenY) {
+      this.board[toX][toY] = (this.turn === WHITE ? "Q" : "q")
+    } else {
+      this.board[toX][toY] = piece
+    }
+    this.board[fromX][fromY] = "."
+    this.turn = -this.turn
+
+    // Track the en passant square
+    if (piece.toUpperCase() === "P" && Math.abs(fromY - toY) === 2) {
+      this.passant = [fromX, (fromY + toY) / 2]
+    } else {
+      this.passant = null
+    }
+
+    // Update whether future castling is prevented
+    if (this.board[4][0] != "K") {
+      this.kingsideOK[WHITE] = false
+      this.queensideOK[WHITE] = false
+    }
+    if (this.board[0][0] != "R") {
+      this.queensideOK[WHITE] = false
+    }
+    if (this.board[7][0] != "R") {
+      this.kingsideOK[WHITE] = false
+    }
+    if (this.board[4][7] != "k") {
+      this.kingsideOK[WHITE] = false
+      this.queensideOK[WHITE] = false
+    }
+    if (this.board[0][7] != "r") {
+      this.queensideOK[WHITE] = false
+    }
+    if (this.board[7][7] != "r") {
+      this.kingsideOK[WHITE] = false
     }
   }
 
-  return answer
-}
-
-isValidMove(fromX, fromY, toX, toY) {
-  var valids = this.validMoves()
-  for (var valid of valids) {
-    if (jequal(valid, [fromX, fromY, toX, toY])) {
-      return true
+  canTakeKing() {
+    var moves = this.validMovesIgnoringCheck()
+    for (var xy of moves) {
+      var [_, _, x, y] = xy
+      if (this.board[x][y].toUpperCase() === "K") {
+        return true
+      }
     }
-  }
-  return false
-}
-
-validMovesFrom(fromX, fromY) {
-  var answer = []
-
-  var valids = this.validMoves()
-  for (var valid of valids) {
-    if (fromX == valid[0] && fromY == valid[1]) {
-      answer.push([valid[2], valid[3]])
-    }
+    return false
   }
 
-  return answer
-}
+  isCheck() {
+    var copy = this.copy()
+    copy.turn = -copy.turn
+    return copy.canTakeKing()
+  }
 
-// Throws if a move is invalid.
-// Moves are in long ("Smith") algebraic notation.
-makeSmithMoves(moves, name) {
-  for (var move of moves) {
-    var [fromX, fromY, toX, toY] = moveForSmith(move)
+  isCheckmate() {
+    return this.validMoves().length === 0 && this.isCheck()
+  }
 
-    if (!this.isValidMove(fromX, fromY, toX, toY)) {
-      this.log()
-      throw "in game " + name + ", invalid move: " + move
+  isStalemate() {
+    return this.validMoves().length === 0 && !this.isCheck()
+  }
+
+  movesIntoCheck(fromX, fromY, toX, toY) {
+    var copy = this.copy()
+    copy.makeMove(fromX, fromY, toX, toY)
+    return copy.canTakeKing()
+  }
+
+  // This does not allow moving into check.
+  // This does include castling.
+  // This does not allow castling through check.
+  // This does not allow castling with a piece that has already moved.
+  validMoves() {
+    var answer = []
+    var possible = this.validMovesIgnoringCheck()
+    for (var coords of possible) {
+      var [fromX, fromY, toX, toY] = coords
+      if (!this.movesIntoCheck(fromX, fromY, toX, toY)) {
+        answer.push([fromX, fromY, toX, toY])
+      }
     }
 
-    this.makeMove(fromX, fromY, toX, toY, true)
+    // Add castling.
+    var castley = (this.turn === WHITE ? 0 : 7)
+    var king = (this.turn === WHITE ? "K" : "k")
+    var rook = (this.turn === WHITE ? "R" : "r")
+    if (!this.isCheck() && this.board[4][castley] === king) {
+      if (this.colorForCoords(5, castley) === EMPTY &&
+          this.colorForCoords(6, castley) === EMPTY &&
+          this.board[7][castley] === rook &&
+          !this.movesIntoCheck(4, castley, 5, castley) &&
+          !this.movesIntoCheck(4, castley, 6, castley) &&
+          this.kingsideOK[this.turn]) {
+        answer.push([4, castley, 6, castley])
+      }
+      if (this.colorForCoords(3, castley) === EMPTY &&
+          this.colorForCoords(2, castley) === EMPTY &&
+          this.colorForCoords(1, castley) === EMPTY &&
+          this.board[0][castley] === rook &&
+          !this.movesIntoCheck(4, castley, 3, castley) &&
+          !this.movesIntoCheck(4, castley, 2, castley) &&
+          this.queensideOK[this.turn]) {
+        answer.push([4, castley, 2, castley])
+      }
+    }
+
+    return answer
   }
-}
+
+  isValidMove(fromX, fromY, toX, toY) {
+    var valids = this.validMoves()
+    for (var valid of valids) {
+      if (jequal(valid, [fromX, fromY, toX, toY])) {
+        return true
+      }
+    }
+    return false
+  }
+
+  validMovesFrom(fromX, fromY) {
+    var answer = []
+
+    var valids = this.validMoves()
+    for (var valid of valids) {
+      if (fromX == valid[0] && fromY == valid[1]) {
+        answer.push([valid[2], valid[3]])
+      }
+    }
+
+    return answer
+  }
+
+  // Throws if a move is invalid.
+  // Moves are in long ("Smith") algebraic notation.
+  makeSmithMoves(moves, name) {
+    for (var move of moves) {
+      var [fromX, fromY, toX, toY] = moveForSmith(move)
+
+      if (!this.isValidMove(fromX, fromY, toX, toY)) {
+        this.log()
+        throw "in game " + name + ", invalid move: " + move
+      }
+
+      this.makeMove(fromX, fromY, toX, toY, true)
+    }
+  }
 
 }
 
