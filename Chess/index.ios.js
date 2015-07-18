@@ -59,12 +59,27 @@ var App = React.createClass({
 
   render() {
     var squares = []
+    var hintList
+    if (this.state.selected) {
+      hintList = this.state.board.validMovesFrom(this.state.selected[0],
+                                                 this.state.selected[1])
+    } else {
+      hintList = this.state.board.movablePieces()
+    }
+    // Create a set of strings to work around the nonexistence of nice
+    // set-of-tuple-of-int types
+    var hintSet = {}
+    for (var xy of hintList) {
+      hintSet[`${xy[0]},${xy[1]}`] = true
+    }
+
     for (var y = 7; y >= 0; y--) {
       for (var x = 0; x < 8; x++) {
         var key = x + "," + y
         var letter = this.state.board.board[x][y]
         squares.push(<Square x={x} y={y} key={key} letter={letter}
                       selected={this.isSelected(x, y)}
+                      hinted={hintSet[key]}
                       onSelect={(x, y) => this.select(x, y)} />)
       }
     }

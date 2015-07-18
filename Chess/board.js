@@ -431,6 +431,17 @@ class Board {
 
     return answer
   }
+  
+  // Returns a list of [x, y] pairs.
+  movablePieces() {
+    var answer = []
+    var moves = this.validMoves()
+    for (var move of moves) {
+      var [x, y, _, _] = move
+      answer.push([x, y])
+    }
+    return answer
+  }
 
   isValidMove(fromX, fromY, toX, toY) {
     var valids = this.validMoves()
@@ -442,6 +453,7 @@ class Board {
     return false
   }
 
+  // Returns a list of [x, y] pairs.
   validMovesFrom(fromX, fromY) {
     var answer = []
 
