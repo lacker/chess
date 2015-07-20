@@ -115,6 +115,10 @@ var Square = React.createClass({
     var styleList = [styles.square, colorStyle,
                      {left, bottom}]
 
+    if (this.props.hinted) {
+      styleList.push(styles.hinted)
+    }
+
     var letter = (this.props.letter == ".") ? "" : this.props.letter
     var pieceStyle
     if (letter.toUpperCase() != letter) {
@@ -178,6 +182,10 @@ var styles = StyleSheet.create({
   },
   selectedSquare: {
     backgroundColor: "#ff0000",
+  },
+  hinted: {
+    borderColor: "#ff0000",
+    borderWidth: 5,
   },
   darkPiece: {
     color: "#000000",
