@@ -23,6 +23,12 @@ var App = React.createClass({
   },
 
   select(x, y) {
+    if (this.state.board.turn != WHITE) {
+      // The human is playing White, so ignore selections when it's
+      // not White's turn
+      return
+    }
+
     if (this.state.selected) {
       var fromX = this.state.selected[0]
       var fromY = this.state.selected[1]

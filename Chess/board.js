@@ -6,6 +6,10 @@ var WHITE = 1
 var EMPTY = 0
 var BLACK = -1
 
+function choice(list) {
+  return list[Math.floor(Math.random() * list.length)]
+}
+
 function jlog(x) {
   console.log(JSON.stringify(x))
 }
@@ -358,6 +362,13 @@ class Board {
     if (this.board[7][7] != "r") {
       this.kingsideOK[WHITE] = false
     }
+  }
+
+  makeRandomMove() {
+    var moves = this.validMoves()
+    var move = choice(moves)
+    var [fromX, fromY, toX, toY] = move
+    this.makeMove(fromX, fromY, toX, toY)
   }
 
   canTakeKing() {
