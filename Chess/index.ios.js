@@ -14,8 +14,11 @@ var {
   EMPTY,
   Board,
 } = BoardLib;
+var TimerMixin = require("react-timer-mixin")
 
 var App = React.createClass({
+  mixins: [TimerMixin],
+
   getInitialState() {
     var board = new Board()
     var selected = null
@@ -44,6 +47,13 @@ var App = React.createClass({
         console.log("makeMove(" + fromX + "," + fromY + "," + x + "," + y + ")")
         this.state.board.makeMove(fromX, fromY, x, y)
         this.setState({selected: null})
+
+        // Make a random opponent move in a couple seconds
+        this.setTimeout(
+          () => {
+            this.state.board.makeRandomMove()
+            this.forceUpdate()
+          }, 2000)
         return
       }
     }
