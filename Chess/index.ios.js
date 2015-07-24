@@ -79,8 +79,10 @@ var App = React.createClass({
     if (this.state.selected) {
       hintList = this.state.board.validMovesFrom(this.state.selected[0],
                                                  this.state.selected[1])
-    } else {
+    } else if (this.state.board.turn == WHITE) {
       hintList = this.state.board.movablePieces()
+    } else {
+      hintList = []
     }
     // Create a set of strings to work around the nonexistence of nice
     // set-of-tuple-of-int types
