@@ -51,7 +51,7 @@ var App = React.createClass({
         // Make a random opponent move in a couple seconds
         this.setTimeout(
           () => {
-            this.state.board.makeRandomMove()
+            this.state.board.makeRandomMoveIfPossible()
             this.forceUpdate()
           }, 2000)
         return
