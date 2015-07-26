@@ -119,6 +119,24 @@ var Square = React.createClass({
     return {}
   },
 
+  // Renders just the piece based on this.props.letter
+  renderPiece() {
+    var letter = (this.props.letter == ".") ? "" : this.props.letter
+    var pieceStyle
+    if (letter.toUpperCase() != letter) {
+      letter = letter.toUpperCase()
+      pieceStyle = styles.darkPiece
+    } else {
+      pieceStyle = styles.lightPiece
+    }
+    
+    return (
+      <Text style={pieceStyle}>
+        {letter}
+      </Text>      
+    )
+  },
+
   render() {
     var colorStyle
     if (this.props.selected) {
@@ -137,15 +155,6 @@ var Square = React.createClass({
       styleList.push(styles.hinted)
     }
 
-    var letter = (this.props.letter == ".") ? "" : this.props.letter
-    var pieceStyle
-    if (letter.toUpperCase() != letter) {
-      letter = letter.toUpperCase()
-      pieceStyle = styles.darkPiece
-    } else {
-      pieceStyle = styles.lightPiece
-    }
-    
     return (
       <View
         style={styleList}
@@ -153,9 +162,7 @@ var Square = React.createClass({
         onResponderMove={this._onResponderMove}
         onResponderRelease={this._onResponderRelease}
         >
-        <Text style={pieceStyle}>
-        {letter}
-        </Text>
+        {this.renderPiece()}
       </View>
     )
   },
