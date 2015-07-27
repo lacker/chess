@@ -3,6 +3,7 @@
 var React = require("react-native");
 var {
   AppRegistry,
+  Image,
   StyleSheet,
   Text,
   View,
@@ -122,6 +123,15 @@ var Square = React.createClass({
   // Renders just the piece based on this.props.letter
   renderPiece() {
     var letter = (this.props.letter == ".") ? "" : this.props.letter
+
+    if (letter == "k") {
+      return (<Image
+              style={styles.piece}
+              source={require("image!black_king")}
+              />)
+    }
+
+    // Do a text-based piece
     var pieceStyle
     if (letter.toUpperCase() != letter) {
       letter = letter.toUpperCase()
@@ -212,6 +222,10 @@ var styles = StyleSheet.create({
     borderColor: "#ff0000",
     borderWidth: 5,
   },
+  // For image-based pieces
+  piece: {
+  },
+  // For letter-based pieces
   darkPiece: {
     color: "#000000",
     fontSize: 47,
