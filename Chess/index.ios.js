@@ -124,10 +124,16 @@ var Square = React.createClass({
   renderPiece() {
     var letter = (this.props.letter == ".") ? "" : this.props.letter
 
-    if (letter == "k") {
+    var iconMap = {
+      k: require("image!black_king"),
+      q: require("image!black_queen"),
+      r: require("image!black_rook"),
+    }
+    var icon = iconMap[letter]
+    if (icon) {
       return (<Image
               style={styles.piece}
-              source={require("image!black_king")}
+              source={icon}
               />)
     }
 
@@ -224,6 +230,8 @@ var styles = StyleSheet.create({
   },
   // For image-based pieces
   piece: {
+    width: CELL,
+    height: CELL,
   },
   // For letter-based pieces
   darkPiece: {
