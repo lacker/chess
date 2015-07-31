@@ -7,11 +7,14 @@ images = base_dir + "/images"
 
 for image in os.listdir(images):
   # Strip off the .png
-  base = image.split(".")[0]
+  name = image.split(".")[0]
 
   # The source picture
-  fname = os.path.join(images, image)
-  print fname
+  source = os.path.join(images, image)
 
   # Check if the destination dir exists
-  target_dir = os.path.join
+  target_dir = "%s/iOS/Images.xcassets/%s.imageset" % (base_dir, name)
+  if os.path.exists(target_dir):
+    print target_dir, "exists"
+  else:
+    print target_dir, "does not exist"
