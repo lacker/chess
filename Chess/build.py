@@ -22,4 +22,8 @@ for image in os.listdir(images):
   print target_dir, "does not exist. creating it..."
   os.mkdir(target_dir)
 
-  # TODO: copy image file 3x, create json registry
+  for suffix in ("", "@2x", "@3x"):
+    target_fname = name + suffix + ".png"
+    target = target_dir + "/" + target_fname
+    shutil.copyfile(source, target)
+    # TODO: create json registry
