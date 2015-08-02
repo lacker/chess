@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import json
 import shutil
 import os
 
@@ -22,8 +23,25 @@ for image in os.listdir(images):
   print target_dir, "does not exist. creating it..."
   os.mkdir(target_dir)
 
-  for suffix in ("", "@2x", "@3x"):
+  images_data = []
+  for suffix, scale in (("", "1x"), ("@2x", "2x"), ("@3x", "3x")):
     target_fname = name + suffix + ".png"
+    images_data.append({
+      "idiom": "universal",
+      "scale": scale,
+      "filename": target_fname,
+    })
     target = target_dir + "/" + target_fname
     shutil.copyfile(source, target)
-    # TODO: create json registry
+
+  # Create json registry
+  contents = {
+    "images": images_data,
+    "info": {
+      "version": 2,
+      "author": "build.py",
+    },
+  }
+
+  # TODO: actually create Contents.json
+  print "contents:", json.dumps(contents)
