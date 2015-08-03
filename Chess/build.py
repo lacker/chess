@@ -43,5 +43,7 @@ for image in os.listdir(images):
     },
   }
 
-  # TODO: actually create Contents.json
-  print "contents:", json.dumps(contents)
+  # Create Contents.json
+  f = open(target_dir + "/Contents.json", "w")
+  f.write(json.dumps(contents))
+  f.close()
