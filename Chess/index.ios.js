@@ -131,6 +131,12 @@ var Square = React.createClass({
       b: require("image!black_bishop"),
       n: require("image!black_knight"),
       p: require("image!black_pawn"),
+      K: require("image!white_king"),
+      Q: require("image!white_queen"),
+      R: require("image!white_rook"),
+      B: require("image!white_bishop"),
+      N: require("image!white_knight"),
+      P: require("image!white_pawn"),
     }
     var icon = iconMap[letter]
     if (icon) {
