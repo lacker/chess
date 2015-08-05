@@ -103,12 +103,24 @@ var App = React.createClass({
       }
     }
 
+    var message = ""
+    if (this.state.board.isCheckmate()) {
+      if (this.state.board.turn == BLACK) {
+        message = "you win!"
+      } else {
+        message = "you lose."
+      }
+    }
+
     return (
-      <View style={styles.center}>
-        <View style={styles.board}>
-          {squares}
+        <View style={styles.center}>
+          <View style={styles.board}>
+            {squares}
+          </View>
+          <Text style={styles.message}>
+            {message}
+          </Text>
         </View>
-      </View>
     )
   },
 })
@@ -217,6 +229,11 @@ var styles = StyleSheet.create({
     width: CELL * 8,
     height: CELL * 8,
   },
+  message: {
+    fontSize: 48,
+  },
+
+  // For squares
   square: {
     position: "absolute",
     width: CELL,
@@ -237,11 +254,13 @@ var styles = StyleSheet.create({
     borderColor: "#ff0000",
     borderWidth: 5,
   },
+
   // For image-based pieces
   piece: {
     width: CELL,
     height: CELL,
   },
+
   // For letter-based pieces
   darkPiece: {
     color: "#000000",
