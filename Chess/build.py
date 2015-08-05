@@ -38,12 +38,12 @@ for image in os.listdir(images):
   contents = {
     "images": images_data,
     "info": {
-      "version": 2,
-      "author": "build.py",
+      "version": 1,
+      "author": "xcode",
     },
   }
 
   # Create Contents.json
   f = open(target_dir + "/Contents.json", "w")
-  f.write(json.dumps(contents))
+  f.write(json.dumps(contents, indent=2))
   f.close()
