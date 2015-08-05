@@ -1,1 +1,23 @@
-{"images": [{"idiom": "universal", "scale": "1x", "filename": "white_bishop.png"}, {"idiom": "universal", "scale": "2x", "filename": "white_bishop@2x.png"}, {"idiom": "universal", "scale": "3x", "filename": "white_bishop@3x.png"}], "info": {"version": 2, "author": "build.py"}}
+{
+  "images": [
+    {
+      "idiom": "universal", 
+      "scale": "1x", 
+      "filename": "white_bishop.png"
+    }, 
+    {
+      "idiom": "universal", 
+      "scale": "2x", 
+      "filename": "white_bishop@2x.png"
+    }, 
+    {
+      "idiom": "universal", 
+      "scale": "3x", 
+      "filename": "white_bishop@3x.png"
+    }
+  ], 
+  "info": {
+    "version": 1, 
+    "author": "xcode"
+  }
+}
