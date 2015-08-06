@@ -72,6 +72,11 @@ var QUEEN_STEPS = BISHOP_STEPS.concat(ROOK_STEPS)
 class Board {
   // Can also reinflate a board that was stringified.
   constructor(data) {
+    this.construct(data)
+  }
+  
+  // Helper for the constructor
+  construct(data) {
     if (typeof data === "string") {
       data = JSON.parse(data)
     }

@@ -27,6 +27,13 @@ var App = React.createClass({
   },
 
   select(x, y) {
+    if (this.state.board.isCheckmate()) {
+      // Play a new game
+      this.state.board.construct()
+      this.forceUpdate()      
+      return
+    }
+
     if (this.state.board.turn != WHITE) {
       // The human is playing White, so ignore selections when it's
       // not White's turn
@@ -49,16 +56,18 @@ var App = React.createClass({
         this.state.board.makeMove(fromX, fromY, x, y)
         this.setState({selected: null})
 
-        // Make a random opponent move in a couple seconds
-        this.setTimeout(
-          () => {
-            this.state.board.makeRandomMoveIfPossible()
-            this.forceUpdate()
-          }, 2000)
-        return
+        if (!this.state.board.isCheckmate()) {
+          // Make a random opponent move in a couple seconds
+          this.setTimeout(
+            () => {
+              this.state.board.makeRandomMoveIfPossible()
+              this.forceUpdate()
+            }, 2000)
+          return
+        }
       }
     }
-
+    
     // Check if we're selecting a piece that can move
     var destinations = this.state.board.validMovesFrom(x, y)
     if (destinations.length == 0) {
@@ -118,12 +127,15 @@ var App = React.createClass({
 
     return (
         <View style={styles.enclosing}>
+          <View style={styles.header} />
           <View style={styles.board}>
             {squares}
           </View>
-          <Text style={styles.message}>
-            {message}
-          </Text>
+          <View style={styles.footer}>
+            <Text style={styles.message}>
+              {message}
+            </Text>
+          </View>
         </View>
     )
   },
@@ -213,17 +225,25 @@ var styles = StyleSheet.create({
   enclosing: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FF0000",
+    backgroundColor: "#EEEEEE",
     flex: 1,
   },
   board: {
-    top: 120,
     width: CELL * 8,
     height: CELL * 8,
   },
+  // The header doesn't get rendered, and to verify that we give it a
+  // nonsense color. It's just used for spacing.
+  header: {
+    backgroundColor: "#00FF00",
+    flex: 1,
+  },
+  footer: {
+    justifyContent: "center",
+    flex: 1,
+  },
   message: {
     fontSize: 48,
-    bottom: -150,
   },
 
   // For squares
