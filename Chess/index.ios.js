@@ -231,6 +231,7 @@ var styles = StyleSheet.create({
   },
   message: {
     fontSize: 48,
+    bottom: -150,
   },
 
   // For squares
