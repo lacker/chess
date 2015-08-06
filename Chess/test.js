@@ -73,3 +73,8 @@ board.newBoard("queenside castling moves rook", [
   "b1c3", "b8c6",
   "e1c1", "e8c8",
   "d1e1", "d8e8"])
+
+var b = board.newBoard("validMovesFrom includes captures", [
+  "e2e4", "d7d5"])
+testEq("ed is valid", true, b.isValidMove(4, 3, 3, 4))
+testEq("two valid pawn moves", 2, b.validMovesFrom(4, 3).length)

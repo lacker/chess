@@ -85,6 +85,7 @@ var App = React.createClass({
     } else {
       hintList = []
     }
+
     // Create a set of strings to work around the nonexistence of nice
     // set-of-tuple-of-int types
     var hintSet = {}
@@ -157,21 +158,8 @@ var Square = React.createClass({
               source={icon}
               />)
     }
-
-    // Do a text-based piece
-    var pieceStyle
-    if (letter.toUpperCase() != letter) {
-      letter = letter.toUpperCase()
-      pieceStyle = styles.darkPiece
-    } else {
-      pieceStyle = styles.lightPiece
-    }
     
-    return (
-      <Text style={pieceStyle}>
-        {letter}
-      </Text>      
-    )
+    return <View />
   },
 
   render() {
@@ -256,22 +244,9 @@ var styles = StyleSheet.create({
     borderWidth: 5,
   },
 
-  // For image-based pieces
   piece: {
     width: CELL,
     height: CELL,
-  },
-
-  // For letter-based pieces
-  darkPiece: {
-    color: "#000000",
-    fontSize: 47,
-    fontWeight: "bold",
-  },
-  lightPiece: {
-    color: "#ffffff",
-    fontSize: 47,
-    fontWeight: "bold",
   },
 });
 
