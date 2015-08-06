@@ -81,7 +81,10 @@ var App = React.createClass({
       hintList = this.state.board.validMovesFrom(this.state.selected[0],
                                                  this.state.selected[1])
     } else if (this.state.board.turn == WHITE) {
-      hintList = this.state.board.movablePieces()
+      hintList = []
+
+      // Uncomment this out to show hints when it's the human's move.
+      // hintList = this.state.board.movablePieces()
     } else {
       hintList = []
     }
@@ -114,7 +117,7 @@ var App = React.createClass({
     }
 
     return (
-        <View style={styles.center}>
+        <View style={styles.enclosing}>
           <View style={styles.board}>
             {squares}
           </View>
@@ -163,13 +166,12 @@ var Square = React.createClass({
   },
 
   render() {
+    var highlight = this.props.hinted || this.props.selected
     var colorStyle
-    if (this.props.selected) {
-      colorStyle = styles.selectedSquare
-    } else if ((this.props.x + this.props.y) % 2 == 0) {
-      colorStyle = styles.darkSquare
+    if ((this.props.x + this.props.y) % 2 == 0) {
+      colorStyle = highlight ? styles.darkHighlight : styles.darkSquare
     } else {
-      colorStyle = styles.lightSquare
+      colorStyle = highlight ? styles.lightHighlight : styles.lightSquare
     }
     var left = this.props.x * CELL
     var bottom = this.props.y * CELL
@@ -208,9 +210,11 @@ var Square = React.createClass({
 })
 
 var styles = StyleSheet.create({
-  center: {
+  enclosing: {
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#FF0000",
+    flex: 1,
   },
   board: {
     top: 120,
@@ -231,17 +235,16 @@ var styles = StyleSheet.create({
     justifyContent: "center",
   },
   darkSquare: {
-    backgroundColor: "#876543",
+    backgroundColor: "#8CA2AD",
   },
   lightSquare: {
-    backgroundColor: "#fecb87",
+    backgroundColor: "#DEE3E6",
   },
-  selectedSquare: {
-    backgroundColor: "#ff0000",
+  darkHighlight: {
+    backgroundColor: "#92B165",
   },
-  hinted: {
-    borderColor: "#ff0000",
-    borderWidth: 5,
+  lightHighlight: {
+    backgroundColor: "#C2D787",
   },
 
   piece: {
