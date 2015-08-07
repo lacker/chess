@@ -397,11 +397,22 @@ class Board {
   }
 
   isCheckmate() {
-    return this.validMoves().length === 0 && this.isCheck()
+    return this.gameOver() && this.isCheck()
   }
 
   isStalemate() {
-    return this.validMoves().length === 0 && !this.isCheck()
+    return this.gameOver() && !this.isCheck()
+  }
+
+  gameOver() {
+    return this.validMoves().length === 0
+  }
+
+  getWinner() {
+    if (this.isCheckmate()) {
+      return -this.turn
+    }
+    return EMPTY
   }
 
   movesIntoCheck(fromX, fromY, toX, toY) {

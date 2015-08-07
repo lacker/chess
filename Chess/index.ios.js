@@ -27,7 +27,7 @@ var App = React.createClass({
   },
 
   select(x, y) {
-    if (this.state.board.isCheckmate()) {
+    if (this.state.board.gameOver()) {
       // Play a new game
       this.state.board.construct()
       this.forceUpdate()      
@@ -56,7 +56,7 @@ var App = React.createClass({
         this.state.board.makeMove(fromX, fromY, x, y)
         this.setState({selected: null})
 
-        if (!this.state.board.isCheckmate()) {
+        if (!this.state.board.gameOver()) {
           // Make a random opponent move in a couple seconds
           this.setTimeout(
             () => {
@@ -117,12 +117,13 @@ var App = React.createClass({
     }
 
     var message = ""
-    if (this.state.board.isCheckmate()) {
-      if (this.state.board.turn == BLACK) {
-        message = "you win!"
-      } else {
-        message = "you lose."
-      }
+    var winner = this.state.board.getWinner()
+    if (winner == WHITE) {
+      message = "you win!"
+    } else if (winner == BLACK) {
+      message = "you lose."
+    } else if (this.state.board.isStalemate()) {
+      message = "it's a draw."
     }
 
     return (
