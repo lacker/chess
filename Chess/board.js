@@ -109,6 +109,9 @@ class Board {
       this.kingsideOK[color] = true
       this.queensideOK[color] = true
     }
+
+    // The last move that was made, in [x1, y1, x2, y2] form. Or null
+    this.lastMove = (data && data.lastMove) || null
   }
 
   // Converts to JSON. The constructor accepts this
@@ -118,7 +121,8 @@ class Board {
       passant: this.passant,
       turn: this.turn,
       kingsideOK: this.kingsideOK,
-      queensideOK: this.queensideOK
+      queensideOK: this.queensideOK,
+      lastMove: this.lastMove,
     })
   }
 
@@ -367,6 +371,8 @@ class Board {
     if (this.board[7][7] != "r") {
       this.kingsideOK[WHITE] = false
     }
+
+    this.lastMove = [fromX, fromY, toX, toY]
   }
 
   makeRandomMoveIfPossible() {
