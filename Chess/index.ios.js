@@ -16,6 +16,7 @@ var {
   Board,
 } = BoardLib;
 var TimerMixin = require("react-timer-mixin")
+var Video = require("react-native-video")
 
 var App = React.createClass({
   mixins: [TimerMixin],
@@ -23,7 +24,8 @@ var App = React.createClass({
   getInitialState() {
     var board = new Board()
     var selected = null
-    return {board, selected}
+    var sound = null
+    return {board, selected, sound}
   },
 
   select(x, y) {
@@ -128,6 +130,7 @@ var App = React.createClass({
 
     return (
         <View style={styles.enclosing}>
+          <GameAudio sound={this.state.sound} />
           <View style={styles.header} />
           <View style={styles.board}>
             {squares}
@@ -139,6 +142,21 @@ var App = React.createClass({
           </View>
         </View>
     )
+  },
+})
+
+// Plays a sound provided in "sound" at render time, and that's it.
+var GameAudio = React.createClass({
+  render() {
+    if (!this.props.sound) {
+      return null
+    }
+
+    return (
+        <Video
+          source={{uri: this.props.sound}}
+          style={styles.backgroundVideo}
+        />)
   },
 })
 
