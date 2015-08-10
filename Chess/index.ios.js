@@ -56,7 +56,7 @@ var App = React.createClass({
 
       if (this.state.board.isValidMove(fromX, fromY, x, y)) {
         // We are making a move
-        console.log("makeMove(" + fromX + "," + fromY + "," + x + "," + y + ")")
+        // console.log("makeMove(" + fromX + "," + fromY + "," + x + "," + y + ")")
         this.state.board.makeMove(fromX, fromY, x, y)
         this.setState({selected: null, sound: "click"})
 
@@ -77,7 +77,7 @@ var App = React.createClass({
     if (destinations.length == 0) {
       return
     }
-    console.log("select(" + x + "," + y + ")")
+    // console.log("select(" + x + "," + y + ")")
     this.setState({selected: [x, y], sound: null})
   },
 
@@ -167,10 +167,7 @@ var GameAudio = React.createClass({
       click: "http://lacker.io/assets/click.mp3",
     }[this.props.sound]
 
-    if (!uri) {
-      console.log("no sound found for " + this.props.sound)
-      return null
-    }
+    console.log("playing sound: " + uri)
 
     return <Video
         source={{uri}}
@@ -250,17 +247,17 @@ var Square = React.createClass({
   },
 
   _onStartShouldSetResponder: function(e) {
-    console.log("onStartShouldSetResponder")
+    // console.log("onStartShouldSetResponder")
     this.props.onSelect(this.props.x, this.props.y)
     return true
   },
 
   _onResponderMove: function(e) {
-    console.log("onResponderMover")
+    // console.log("onResponderMover")
   },
 
   _onResponderRelease: function(e) {
-    console.log("onResponderRelease")
+    // console.log("onResponderRelease")
   },
 })
 
