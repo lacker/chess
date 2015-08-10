@@ -85,17 +85,17 @@ var App = React.createClass({
 
   render() {
     var squares = []
-    var hintList
+    var hintList = []
     if (this.state.selected) {
       hintList = this.state.board.validMovesFrom(this.state.selected[0],
                                                  this.state.selected[1])
     } else if (this.state.board.turn == WHITE) {
-      hintList = []
+      if (this.state.board.lastMove != null) {
+        var [fromX, fromY, toX, toY] = this.state.board.lastMove
 
-      // Uncomment this out to show hints when it's the human's move.
-      // hintList = this.state.board.movablePieces()
-    } else {
-      hintList = []
+        // Show the black player's last move as "hinted"
+        hintList = [[fromX, fromY], [toX, toY]]
+      }
     }
 
     // Create a set of strings to work around the nonexistence of nice
