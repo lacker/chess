@@ -17,6 +17,7 @@ var {
   Board,
 } = BoardLib;
 
+var AudioPlayer = require("react-native-audioplayer")
 var TimerMixin = require("react-timer-mixin")
 var Video = require("react-native-video")
 
@@ -149,6 +150,26 @@ var App = React.createClass({
 
 // Plays a sound provided in "sound" at render time, and that's it.
 var GameAudio = React.createClass({
+  onLoadStart() {
+    console.log("onLoadStart")
+  },
+
+  onLoad() {
+    console.log("onLoad")
+  },
+
+  onProgress() {
+    console.log("onProgress")
+  },
+
+  onEnd() {
+    console.log("onEnd")
+  },
+  
+  onError() {
+    console.log("onError")
+  },
+
   render() {
     // Check environment
     var NativeModules = require("NativeModules")
@@ -164,10 +185,11 @@ var GameAudio = React.createClass({
     }
 
     var uri = {
-      click: "http://lacker.io/assets/click.mp3",
+      click: "https://lacker.io/assets/click.mp3",
     }[this.props.sound]
 
-    console.log("playing sound: " + uri)
+    console.log("rendering sound: " + uri)
+    AudioPlayer.play("click.mp3")
 
     return <Video
         source={{uri}}
@@ -176,9 +198,15 @@ var GameAudio = React.createClass({
         volume={1.0}               // 0 is muted, 1 is normal.
         muted={false}              // Mutes the audio entirely.
         paused={false}             // Pauses playback entirely.
-        resizeMode="cover"         // Fill the whole screen at aspect ratio.
+        resizeMode="cover"         // Fill the whole screen
+
+        onLoadStart={this.onLoadStart}
+        onLoad={this.onLoad}
+        onProgress={this.onProgress}
+        onEnd={this.onEnd}
+        onError={this.onError}
       />
-  }
+  },
 })
 
 var CELL = 94

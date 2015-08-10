@@ -8,6 +8,7 @@
   "dependencies": {
     "react-native": "~0.5.0",
     "react-timer-mixin": "~0.13.2",
-    "react-native-video": "~0.5.1"
+    "react-native-video": "~0.5.1",
+    "react-native-audioplayer": "~0.1.0"
   }
 }
