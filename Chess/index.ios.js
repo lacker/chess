@@ -8,6 +8,7 @@ var {
   Text,
   View,
 } = React;
+
 var BoardLib = require("./board")
 var {
   WHITE,
@@ -15,6 +16,7 @@ var {
   EMPTY,
   Board,
 } = BoardLib;
+
 var TimerMixin = require("react-timer-mixin")
 var Video = require("react-native-video")
 
@@ -32,7 +34,7 @@ var App = React.createClass({
     if (this.state.board.gameOver()) {
       // Play a new game
       this.state.board.construct()
-      this.forceUpdate()      
+      this.setState({selected: null, sound: null})
       return
     }
 
@@ -48,7 +50,7 @@ var App = React.createClass({
 
       if (fromX == x && fromY == y) {
         // We are canceling a move by re-selecting the selection
-        this.setState({selected: null})
+        this.setState({selected: null, sound: null})
         return
       }
 
@@ -56,14 +58,14 @@ var App = React.createClass({
         // We are making a move
         console.log("makeMove(" + fromX + "," + fromY + "," + x + "," + y + ")")
         this.state.board.makeMove(fromX, fromY, x, y)
-        this.setState({selected: null})
+        this.setState({selected: null, sound: "click"})
 
         if (!this.state.board.gameOver()) {
           // Make a random opponent move in a couple seconds
           this.setTimeout(
             () => {
               this.state.board.makeRandomMoveIfPossible()
-              this.forceUpdate()
+              this.setState({selected: null, sound: "click"})
             }, 2000)
           return
         }
@@ -76,7 +78,7 @@ var App = React.createClass({
       return
     }
     console.log("select(" + x + "," + y + ")")
-    this.setState({selected: [x, y]})
+    this.setState({selected: [x, y], sound: null})
   },
 
   isSelected(x, y) {
@@ -148,16 +150,38 @@ var App = React.createClass({
 // Plays a sound provided in "sound" at render time, and that's it.
 var GameAudio = React.createClass({
   render() {
+    // Check environment
+    var NativeModules = require("NativeModules")
+    if (!NativeModules) {
+      throw "NativeModules is not importing right"
+    }
+    if (!NativeModules.VideoManager) {
+      console.log("Video is not importing right")
+    }
+
     if (!this.props.sound) {
       return null
     }
 
-    return (
-        <Video
-          source={{uri: this.props.sound}}
-          style={styles.backgroundVideo}
-        />)
-  },
+    var uri = {
+      click: "http://lacker.io/assets/click.mp3",
+    }[this.props.sound]
+
+    if (!uri) {
+      console.log("no sound found for " + this.props.sound)
+      return null
+    }
+
+    return <Video
+        source={{uri}}
+        style={styles.backgroundVideo}
+        rate={1.0}                 // 0 is paused, 1 is normal.
+        volume={1.0}               // 0 is muted, 1 is normal.
+        muted={false}              // Mutes the audio entirely.
+        paused={false}             // Pauses playback entirely.
+        resizeMode="cover"         // Fill the whole screen at aspect ratio.
+      />
+  }
 })
 
 var CELL = 94
