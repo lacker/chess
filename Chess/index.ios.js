@@ -19,7 +19,10 @@ var {
 
 var AudioPlayer = require("react-native-audioplayer")
 var TimerMixin = require("react-timer-mixin")
-var Video = require("react-native-video")
+
+function click() {
+  AudioPlayer.play("click.mp3")
+}
 
 var App = React.createClass({
   mixins: [TimerMixin],
@@ -27,15 +30,14 @@ var App = React.createClass({
   getInitialState() {
     var board = new Board()
     var selected = null
-    var sound = null
-    return {board, selected, sound}
+    return {board, selected}
   },
 
   select(x, y) {
     if (this.state.board.gameOver()) {
       // Play a new game
       this.state.board.construct()
-      this.setState({selected: null, sound: null})
+      this.setState({selected: null})
       return
     }
 
@@ -51,7 +53,7 @@ var App = React.createClass({
 
       if (fromX == x && fromY == y) {
         // We are canceling a move by re-selecting the selection
-        this.setState({selected: null, sound: null})
+        this.setState({selected: null})
         return
       }
 
@@ -59,14 +61,17 @@ var App = React.createClass({
         // We are making a move
         // console.log("makeMove(" + fromX + "," + fromY + "," + x + "," + y + ")")
         this.state.board.makeMove(fromX, fromY, x, y)
-        this.setState({selected: null, sound: "click"})
+        click()
+        this.setState({selected: null})
 
         if (!this.state.board.gameOver()) {
           // Make a random opponent move in a couple seconds
           this.setTimeout(
             () => {
-              this.state.board.makeRandomMoveIfPossible()
-              this.setState({selected: null, sound: "click"})
+              if (this.state.board.makeRandomMoveIfPossible()) {
+                click()
+              }
+              this.setState({selected: null})
             }, 2000)
           return
         }
@@ -79,7 +84,7 @@ var App = React.createClass({
       return
     }
     // console.log("select(" + x + "," + y + ")")
-    this.setState({selected: [x, y], sound: null})
+    this.setState({selected: [x, y]})
   },
 
   isSelected(x, y) {
@@ -133,7 +138,6 @@ var App = React.createClass({
 
     return (
         <View style={styles.enclosing}>
-          <GameAudio sound={this.state.sound} />
           <View style={styles.header} />
           <View style={styles.board}>
             {squares}
@@ -145,67 +149,6 @@ var App = React.createClass({
           </View>
         </View>
     )
-  },
-})
-
-// Plays a sound provided in "sound" at render time, and that's it.
-var GameAudio = React.createClass({
-  onLoadStart() {
-    console.log("onLoadStart")
-  },
-
-  onLoad() {
-    console.log("onLoad")
-  },
-
-  onProgress() {
-    console.log("onProgress")
-  },
-
-  onEnd() {
-    console.log("onEnd")
-  },
-  
-  onError() {
-    console.log("onError")
-  },
-
-  render() {
-    // Check environment
-    var NativeModules = require("NativeModules")
-    if (!NativeModules) {
-      throw "NativeModules is not importing right"
-    }
-    if (!NativeModules.VideoManager) {
-      console.log("Video is not importing right")
-    }
-
-    if (!this.props.sound) {
-      return null
-    }
-
-    var uri = {
-      click: "https://lacker.io/assets/click.mp3",
-    }[this.props.sound]
-
-    console.log("rendering sound: " + uri)
-    AudioPlayer.play("click.mp3")
-
-    return <Video
-        source={{uri}}
-        style={styles.backgroundVideo}
-        rate={1.0}                 // 0 is paused, 1 is normal.
-        volume={1.0}               // 0 is muted, 1 is normal.
-        muted={false}              // Mutes the audio entirely.
-        paused={false}             // Pauses playback entirely.
-        resizeMode="cover"         // Fill the whole screen
-
-        onLoadStart={this.onLoadStart}
-        onLoad={this.onLoad}
-        onProgress={this.onProgress}
-        onEnd={this.onEnd}
-        onError={this.onError}
-      />
   },
 })
 

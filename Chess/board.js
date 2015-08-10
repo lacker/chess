@@ -378,11 +378,12 @@ class Board {
   makeRandomMoveIfPossible() {
     var moves = this.validMoves()
     if (moves.length == 0) {
-      return
+      return false
     }
     var move = choice(moves)
     var [fromX, fromY, toX, toY] = move
     this.makeMove(fromX, fromY, toX, toY)
+    return true
   }
 
   canTakeKing() {
