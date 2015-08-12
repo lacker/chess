@@ -74,6 +74,12 @@ board.newBoard("queenside castling moves rook", [
   "e1c1", "e8c8",
   "d1e1", "d8e8"])
 
+board.newBoard("white castling after black moves king", [
+  "e2e4", "e7e5",
+  "f1e2", "f8d6",
+  "g1f3", "e8e7",
+  "e1g1"])
+
 var b = board.newBoard("validMovesFrom includes captures", [
   "e2e4", "d7d5"])
 testEq("ed is valid", true, b.isValidMove(4, 3, 3, 4))
