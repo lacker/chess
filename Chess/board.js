@@ -362,14 +362,14 @@ class Board {
       this.kingsideOK[WHITE] = false
     }
     if (this.board[4][7] != "k") {
-      this.kingsideOK[WHITE] = false
-      this.queensideOK[WHITE] = false
+      this.kingsideOK[BLACK] = false
+      this.queensideOK[BLACK] = false
     }
     if (this.board[0][7] != "r") {
-      this.queensideOK[WHITE] = false
+      this.queensideOK[BLACK] = false
     }
     if (this.board[7][7] != "r") {
-      this.kingsideOK[WHITE] = false
+      this.kingsideOK[BLACK] = false
     }
 
     this.lastMove = [fromX, fromY, toX, toY]
