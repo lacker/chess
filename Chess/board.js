@@ -135,6 +135,30 @@ class Board {
       console.log(line)
     }
   }
+  
+  // Returns the material score - positive for white, negative for black.
+  material() {
+    var answer = 0
+    for (var x = 0; x < 8; x++) {
+      for (var y = 0; y < 8; y++) {
+        answer += {
+          ".": 0,
+          K: 0,
+          Q: 9,
+          R: 5,
+          B: 3,
+          N: 3,
+          P: 1,
+          k: 0,
+          q: -9,
+          r: -5,
+          b: -3,
+          n: -3,
+          p: -1,
+        }[this.board[x][y]]
+      }
+    }
+  }
 
   colorForCoords(x, y) {
     return colorForPiece(this.board[x][y])
