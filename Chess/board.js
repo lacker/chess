@@ -160,6 +160,24 @@ class Board {
     }
   }
 
+  // Returns a score for the player to play.
+  // depth is in ply.
+  // The convention is that positive is good for the player to play.
+  // The other part of the convention is that the score is the maximum
+  // of the negative scores of descendants.
+  // The base case is that zero depth gives material for white,
+  // negative material for black.
+  negamax(depth) {
+    if (depth > 0) {
+      throw "TODO: implement me"
+    }
+    if (this.turn == WHITE) {
+      return this.material()
+    } else {
+      return -this.material()
+    }
+  }
+
   colorForCoords(x, y) {
     return colorForPiece(this.board[x][y])
   }
