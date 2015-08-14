@@ -168,14 +168,26 @@ class Board {
   // The base case is that zero depth gives material for white,
   // negative material for black.
   negamax(depth) {
-    if (depth > 0) {
-      throw "TODO: implement me"
+    if (depth <= 0) {
+      if (this.turn == WHITE) {
+        return this.material()
+      } else {
+        return -this.material()
+      }
     }
-    if (this.turn == WHITE) {
-      return this.material()
-    } else {
-      return -this.material()
+
+    var score = -100
+    for (var move of this.validMoves()) {
+      var [x1, y1, x2, y2] = move
+      var copy = this.copy()
+      copy.makeMove(x1, y1, x2, y2)
+      var subscore = -copy.negamax(depth - 1)
+      if (subscore > score) {
+        score = subscore
+      }
     }
+
+    return score
   }
 
   colorForCoords(x, y) {
