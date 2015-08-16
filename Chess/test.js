@@ -84,3 +84,6 @@ var b = board.newBoard("validMovesFrom includes captures", [
   "e2e4", "d7d5"])
 testEq("ed is valid", true, b.isValidMove(4, 3, 3, 4))
 testEq("two valid pawn moves", 2, b.validMovesFrom(4, 3).length)
+
+var b = new Board()
+testEq("material starts even", 0, b.material())

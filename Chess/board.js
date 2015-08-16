@@ -158,6 +158,7 @@ class Board {
         }[this.board[x][y]]
       }
     }
+    return answer
   }
 
   // Returns a score for the player to play.
