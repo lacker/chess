@@ -161,7 +161,9 @@ class Board {
     return answer
   }
 
-  // Returns a score for the player to play.
+  // Returns an object with "score" and "move" keys, for the player to
+  // play.
+  // "move" only works when depth > 0.
   // depth is in ply.
   // The convention is that positive is good for the player to play.
   // The other part of the convention is that the score is the maximum
@@ -171,24 +173,32 @@ class Board {
   negamax(depth) {
     if (depth <= 0) {
       if (this.turn == WHITE) {
-        return this.material()
+        return {score: this.material()}
       } else {
-        return -this.material()
+        return {score: -this.material()}
       }
     }
 
+    var moves = this.validMoves()
     var score = -100
-    for (var move of this.validMoves()) {
+    if (moves.length == 0) {
+      // This ignores stalemate, assuming that if we can't move, we
+      // lose.
+      score = -9999
+    }
+    var bestMove = null
+    for (var move of moves) {
       var [x1, y1, x2, y2] = move
       var copy = this.copy()
       copy.makeMove(x1, y1, x2, y2)
-      var subscore = -copy.negamax(depth - 1)
+      var subscore = -copy.negamax(depth - 1).score
       if (subscore > score) {
         score = subscore
+        bestMove = move
       }
     }
 
-    return score
+    return {score, move}
   }
 
   colorForCoords(x, y) {

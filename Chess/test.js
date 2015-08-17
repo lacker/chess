@@ -87,4 +87,4 @@ testEq("two valid pawn moves", 2, b.validMovesFrom(4, 3).length)
 
 var b = new Board()
 testEq("material starts even", 0, b.material())
-testEq("no material can be gained in one move", 0, b.negamax(1))
+testEq("no material can be gained in one move", 0, b.negamax(1).score)
