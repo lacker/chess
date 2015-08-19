@@ -198,7 +198,7 @@ class Board {
       }
     }
 
-    return {score, move}
+    return {score, move: bestMove}
   }
 
   colorForCoords(x, y) {
@@ -438,6 +438,17 @@ class Board {
     }
 
     this.lastMove = [fromX, fromY, toX, toY]
+  }
+
+  makeOpponentMoveIfPossible() {
+    var experiment = true
+    if (experiment) {
+      var best = this.negamax(1)
+      jlog(best)
+      return best.move
+    } else {
+      return this.makeRandomMoveIfPossible()
+    }
   }
 
   makeRandomMoveIfPossible() {

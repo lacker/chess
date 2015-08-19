@@ -65,10 +65,10 @@ var App = React.createClass({
         this.setState({selected: null})
 
         if (!this.state.board.gameOver()) {
-          // Make a random opponent move in a couple seconds
+          // Make an opponent move in a couple seconds
           this.setTimeout(
             () => {
-              if (this.state.board.makeRandomMoveIfPossible()) {
+              if (this.state.board.makeOpponentMoveIfPossible()) {
                 click()
               }
               this.setState({selected: null})
