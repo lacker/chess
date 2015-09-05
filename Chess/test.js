@@ -80,6 +80,13 @@ board.newBoard("white castling after black moves king", [
   "g1f3", "e8e7",
   "e1g1"])
 
+board.newBoard("white q castle after black king move", [
+  "d2d4", "e7e5",
+  "d1d3", "f8d6",
+  "c1d2", "e8e7",
+  "b1a3", "a7a6",
+  "e1c1"])
+
 var b = board.newBoard("validMovesFrom includes captures", [
   "e2e4", "d7d5"])
 testEq("ed is valid", true, b.isValidMove(4, 3, 3, 4))
