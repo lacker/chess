@@ -1,0 +1,15 @@
+{
+  "name": "bug",
+  "version": "0.0.0",
+  "description": "Bughouse",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chess",
+    "bughouse"
+  ],
+  "author": "Kevin Lacker",
+  "license": "MIT"
+}
