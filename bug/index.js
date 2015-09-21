@@ -9,7 +9,7 @@ app.get('/', function (request, response) {
     if (err) {
       throw err;
     }
-    r.db('dev').tableCreate('Message').run(conn, function(err, result) {
+    r.db('test').tableCreate('Message').run(conn, function(err, result) {
       if (err) {
         throw err;
       }
