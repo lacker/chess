@@ -13,6 +13,7 @@
   "author": "Kevin Lacker",
   "license": "MIT",
   "dependencies": {
-    "express": "~4.13.3"
+    "express": "~4.13.3",
+    "rethinkdb": "~2.1.1"
   }
 }
