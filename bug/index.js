@@ -7,23 +7,18 @@ var app = express();
 app.get('/', function (request, response) {
   r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
     if (err) {
+      console.log('error in connect', err);
       throw err;
     }
-    r.db('test').tableCreate('Message').run(conn, function(err, result) {
-      if (err) {
-        throw err;
-      }
-      console.log(result);
-      r.table('Message').insert({content: 'sup world'}).run(
-        conn,
-        function(err, result) {
-          if (err) {
-            throw err;
+    r.db('test').table('Message').insert({content: 'sup world'}).run(
+      conn,
+      function(err, result) {
+        if (err) {
+          throw err;
           }
-          console.log(result);
-          response.send("Got to the center of the nest");
-        });
-    });
+        console.log(result);
+        response.send("Got to the center of the nest");
+      });
   });
 });
 
