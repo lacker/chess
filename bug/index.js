@@ -4,25 +4,25 @@ var r = require('rethinkdb');
 
 var app = express();
 
-app.get('/', function (request, response) {
+// Going to /sup creates a sup message
+app.get('/sup', (request, response) => {
   r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
     if (err) {
       console.log('error in connect', err);
       throw err;
     }
-    r.db('test').table('Message').insert({content: 'sup world'}).run(
-      conn,
-      function(err, result) {
+    var content = 'sup world ' + Math.floor(Math.random() * 1000);
+    r.db('test').table('Message').insert({content}).run(
+      conn, (err, result) => {
         if (err) {
           throw err;
-          }
-        console.log(result);
-        response.send("Got to the center of the nest");
+        }
+        response.send('added: ' + content);
       });
   });
 });
 
-var server = app.listen(3000, function () {
+var server = app.listen(3000, () => {
   var host = server.address().address;
   var port = server.address().port;
 
