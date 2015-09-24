@@ -6,11 +6,7 @@ var app = express();
 
 // Going to /sup creates a sup message
 app.get('/sup', (request, response) => {
-  r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
-    if (err) {
-      console.log('error in connect', err);
-      throw err;
-    }
+  r.connect({ host: 'localhost', port: 28015 }).then((conn) => {
     var content = 'sup world ' + Math.floor(Math.random() * 1000);
     r.db('test').table('Message').insert({content}).run(
       conn, (err, result) => {
@@ -19,6 +15,9 @@ app.get('/sup', (request, response) => {
         }
         response.send('added: ' + content);
       });
+  }).error((err) => {
+    console.log('error', err);
+    response.send('error: ' + err);
   });
 });
 
