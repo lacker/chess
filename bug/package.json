@@ -4,6 +4,7 @@
   "description": "Bughouse",
   "main": "index.js",
   "scripts": {
+    "start": "gulp babel; node es5/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -16,5 +17,12 @@
     "express": "~4.13.3",
     "rethinkdb": "~2.1.1",
     "body-parser": "~1.14.0"
+  },
+  "devDependencies": {
+    "babel-core": "^5.8.25",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.1",
+    "gulp-sourcemaps": "^1.5.2",
+    "source-map-support": "^0.3.2"
   }
 }
