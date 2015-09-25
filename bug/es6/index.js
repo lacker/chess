@@ -1,29 +1,33 @@
-var bodyParser = require('body-parser');
-var express = require('express');
-var r = require('rethinkdb');
+let bodyParser = require('body-parser');
+let express = require('express');
+let r = require('rethinkdbdash')();
 
-var app = express();
+let app = express();
+
+let db = {
+  host: 'localhost',
+  post: 28015
+}
+
+// Posting to /message creates a new message
+app.post('/message', (request, response) => {
+  // TODO: implement
+});
 
 // Going to /sup creates a sup message
 app.get('/sup', (request, response) => {
-  r.connect({ host: 'localhost', port: 28015 }).then((conn) => {
-    var content = 'sup world ' + Math.floor(Math.random() * 1000);
-    r.db('test').table('Message').insert({content}).run(
-      conn, (err, result) => {
-        if (err) {
-          throw err;
-        }
-        response.send('added: ' + content);
-      });
-  }).error((err) => {
-    console.log('error', err);
-    response.send('error: ' + err);
+  let content = 'sup world ' + Math.floor(Math.random() * 1000);
+  r.table('Message').insert({content}).run((err, result) => {
+    if (err) {
+      throw err;
+    }
+    response.send('added: ' + content);
   });
 });
 
-var server = app.listen(3000, () => {
-  var host = server.address().address;
-  var port = server.address().port;
-
+let server = app.listen(3000, () => {
+  let host = server.address().address;
+  let port = server.address().port;
+  
   console.log('Example app listening at http://%s:%s', host, port);
 });
