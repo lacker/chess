@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "gulp babel; node es5/index.js",
+    "listen": "gulp babel; node es5/listen.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

@@ -4,18 +4,8 @@ let r = require('rethinkdbdash')();
 
 let app = express();
 
-let db = {
-  host: 'localhost',
-  post: 28015
-}
-
-// Posting to /message creates a new message
-app.post('/message', (request, response) => {
-  // TODO: implement
-});
-
-// Going to /sup creates a sup message
-app.get('/sup', (request, response) => {
+// Going to / creates a sup message
+app.get('/', (request, response) => {
   let content = 'sup world ' + Math.floor(Math.random() * 1000);
   r.table('Message').insert({content}).run((err, result) => {
     if (err) {
