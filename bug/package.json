@@ -24,6 +24,8 @@
     "gulp": "^3.9.0",
     "gulp-babel": "^5.2.1",
     "gulp-sourcemaps": "^1.5.2",
-    "source-map-support": "^0.3.2"
+    "source-map-support": "^0.3.2",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.0"
   }
 }
