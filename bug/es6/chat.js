@@ -18,5 +18,8 @@ r.table('Message').run({cursor: true}).then((cursor) => {
 
 // Typing stuff in should create a new message
 rl.on('line', (content) => {
-  console.log('readlined content:', content);
+  console.log('inserting ' + content);
+  r.table('Message').insert({content}).run().done();
 });
+
+// TODO: sort by time, make the display stuff listen for liveness
