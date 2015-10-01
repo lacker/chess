@@ -8,8 +8,9 @@ let rl = readline.createInterface({
 
 
 // Display stuff from the chat
-r.table('Message').orderBy('time').run({cursor: true}).then((cursor) => {
-  cursor.each((err, message) => {
+r.table('Message').changes().run().then((cursor) => {
+  cursor.each((err, change) => {
+    let message = change.new_val;
     if (message) {
       console.log(message.content, message.time);
     }
