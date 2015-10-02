@@ -20,7 +20,6 @@ r.table('Message').changes().run().then((cursor) => {
 // Typing stuff in should create a new message
 rl.on('line', (content) => {
   let time = new Date();
-  console.log('inserting ' + content);
   r.table('Message').insert({content, time}).run().done();
 });
 
