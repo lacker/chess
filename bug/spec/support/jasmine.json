@@ -1,0 +1,10 @@
+{
+  "spec_dir": "es5/tests",
+  "spec_files": [
+    "*spec.js"
+  ],
+  "helpers": [
+    "helper.js"
+  ]
+}
+
