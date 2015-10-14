@@ -110,6 +110,10 @@ class Board {
       this.queensideOK[color] = true
     }
 
+    // A map from piece-character to how many of them are in each
+    // player's hand. Only populated in bughouse.
+    this.hand = {}
+
     // The last move that was made, in [x1, y1, x2, y2] form. Or null
     this.lastMove = (data && data.lastMove) || null
   }
@@ -123,6 +127,7 @@ class Board {
       kingsideOK: this.kingsideOK,
       queensideOK: this.queensideOK,
       lastMove: this.lastMove,
+      hand: this.hand,
     })
   }
 
@@ -136,6 +141,12 @@ class Board {
     }
   }
   
+  // Passes a piece to this board.
+  // Uppercase / lowercase defines color.
+  givePiece(ch) {
+    this.hand[ch] = this.hand[ch] + 1
+  }
+
   // Returns the material score - positive for white, negative for black.
   material() {
     var answer = 0

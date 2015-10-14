@@ -4,6 +4,7 @@ class Bughouse {
   constructor() {
     this.boards = [new Board(), new Board()];
   }
+
 }
 
 // TODO: write a makeMove function
